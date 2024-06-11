@@ -1,14 +1,15 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Item, MEAL_TYPE
 from .forms import SignUpForm, LoginForm
 from django.contrib.auth.models import User
 from django.contrib import messages
 
+
 def menu_list(request):
     meals = MEAL_TYPE
     items = Item.objects.order_by('-date_created')
-    return render(request, 'base/index.html', {'meals': meals, 'object_list': items})
+    return render(request, 'base/home.html', {'meals': meals, 'object_list': items})
 
 def menu_item_detail(request, pk):
     item = get_object_or_404(Item, pk=pk)
@@ -17,7 +18,7 @@ def menu_item_detail(request, pk):
 
 def register(request):
     if request.method == 'POST':
-        form =SignUpForm(request.POST)
+        form = SignUpForm(request.POST)
         if form.is_valid():
             form.save()
             username = form.cleaned_data.get('username')
@@ -47,4 +48,6 @@ def loginPage(request):
         
     return render(request, 'base/signup.html', {'page':page})
 
-
+def logoutUser(request):
+    logout(request)
+    return redirect('home')
