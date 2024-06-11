@@ -1,0 +1,147 @@
+
+.layout {
+    margin-top: 2.4rem;
+  }
+  
+  .layout > .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  
+  .layout--3 > .container > div:first-child {
+    flex-basis: 18%;
+    max-width: 22.5rem;
+  }
+  
+  .layout--3 > .container > div:nth-child(2) {
+    flex-basis: 50%;
+  }
+  
+  .layout--3 > .container > div:last-child {
+    flex-basis: 25%;
+  }
+  
+  .layout--2 > .container > div:first-child {
+    flex-basis: 72%;
+  }
+  
+  .layout--2 > .container > div:last-child {
+    flex-basis: 25%;
+  }
+
+
+.layout_box {
+width: 90%;
+max-width: 48rem;
+min-height: 40rem;
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -46%);
+background-color: var(--color-dark);
+border-radius: 1rem;
+box-shadow: 1px 1px 6px 3px rgba(0, 0, 0, 0.1);
+overflow: hidden;
+}
+  
+.layout_boxheader {
+    display: flex;
+    padding: 1.5rem;
+    background-color: var(--color-dark-light);
+}
+
+.layout_boxtitle {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+}
+
+.layout_boxTitle h3 {
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--color-light);
+}
+  
+/* General form container styling */
+.form_container {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 2rem;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+}
+
+/* Form group styling */
+.form_group {
+    margin-bottom: 1.5rem;
+}
+
+/* Label styling */
+.form_group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #333;
+    font-weight: bold;
+}
+
+/* Input field styling */
+.form_group input {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    color: #333;
+    background-color: #fff;
+    transition: border-color 0.3s ease;
+}
+
+/* Input field focus styling */
+.form_group input:focus {
+    border-color: #007BFF;
+    outline: none;
+}
+
+/* Button styling */
+.login-btn {
+    width: 100%;
+    padding: 0.8rem;
+    border: none;
+    border-radius: 4px;
+    background-color: #007BFF;
+    color: #fff;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Button hover styling */
+.login-btn:hover {
+    background-color: #0056b3;
+}
+
+/* Placeholder styling */
+::placeholder {
+    color: #bbb;
+    opacity: 1; /* Ensures full opacity */
+}
+
+/* Additional styles for better visual appearance */
+body {
+    background-color: #eef2f7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.form_container {
+    margin-top: -50px; /* Adjust to center the form better */
+}
+

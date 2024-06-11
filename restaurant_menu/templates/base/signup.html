@@ -1,0 +1,86 @@
+{% extends 'main.html' %}
+{% block content %}
+
+<main class="layout">
+{% if page == 'login' %}
+<div class="container">
+    <div class="layout_box">
+        <div class="layout_boxheader">
+            <div class="layout_boxtitle">
+                <h3>Login</h3>
+            </div>
+        </div>
+        <div class="layout_body">
+            <h2>Login to start ordering</h2>
+
+            {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+            <form action="{% url 'login' %}" method="POST">
+                {% csrf_token %} 
+                <div class="form_group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" placeholder="e.g. John_doe">
+                </div>
+                <div class="form_group">
+                    <label for="password">Password</label>
+                    <input type="password" name="password" id="password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;">
+                </div>
+
+                <button class="login-btn" type="submit">Login</button>
+            </form>
+
+            {% if error %}
+            <div class="error">{{ error }}</div>
+            {% endif %}
+
+            <div class="auth_action">
+                <p>Haven't signed up yet?</p>
+                <a href="{% url 'register' %}" class="btn btn--link">Sign Up</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% else %}
+<div class="container">
+    <div class="layout_box">
+        <div class="layout_boxheader">
+            <div class="layout_boxtitle">
+                <h3>Register</h3>
+            </div>
+        </div>
+
+        <div class="layout_body">
+            <h2 class="auth_tagline">Sign up to start shopping</h2>
+
+            <form action="" method="POST" class="form">
+                {% csrf_token %}
+                {% for field in form %}
+                <div class="form_group">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.errors %}
+                    <div class="error">{{ field.errors }}</div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+
+                <button class="btn" type="submit">Register</button>
+            </form>
+
+            <div class="auth_action">
+                <p>Already signed up?</p>
+                <a href="{% url 'login' %}" class="btn btn--link">Sign In</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+</main>
+{% endblock %}
