@@ -1,9 +1,21 @@
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Item, MEAL_TYPE
+from .models import Item, MEAL_TYPE, Cart, CartItem
 from .forms import SignUpForm, LoginForm
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.urls import reverse
+from functools import wraps
+
+
+def user_not_registered_redirect(view_func):
+    @wraps(view_func)
+    def _wrapped_view(request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('register')
+        return view_func(request, *args, **kwargs)
+    return _wrapped_view
 
 
 def menu_list(request):
@@ -51,3 +63,69 @@ def loginPage(request):
 def logoutUser(request):
     logout(request)
     return redirect('home')
+
+
+@user_not_registered_redirect
+@login_required
+def add_cart(request, item_id):
+    item = get_object_or_404(Item, id=item_id)
+    
+    # Get or create the cart
+    cart, created = Cart.objects.get_or_create(user=request.user, is_active=True)
+    
+    # Check if item is already in cart
+    cart_item,created = CartItem.objects.get_or_create(cart=cart, item=item)
+    
+    if not created:
+        # Item is already in the cart, so we update the quantity
+        cart_item.quantity += 1
+        cart_item.save()
+        
+    return redirect('view_cart')
+
+
+@user_not_registered_redirect
+@login_required
+def view_cart(request):
+    cart = Cart.objects.filter(user=request.user, is_active=True).first()
+    cart_items = CartItem.objects.filter(cart=cart)
+    
+    total_price = sum(item.get_total_price() for item in cart_items)  
+    
+    context = {
+        'cart': cart,
+        'cart_items':cart_items,
+        'total_price':total_price
+    }  
+    
+    return render(request, 'base/cart.html', context)
+
+
+@user_not_registered_redirect
+@login_required
+def update_cart_item(request, item_id):
+    cart = Cart.objects.filter(user=request.user, is_active=True).first()
+    item = get_object_or_404(Item, id=item_id)
+    cart_item = get_object_or_404(CartItem, cart=cart, item=item)
+    
+    if request.method == 'POST':
+        quantity = int(request.POST.get('quantity', 1))
+        if quantity > 0:
+            cart_item.quantity = quantity
+            cart_item.save()
+        else:
+            cart_item.delete()
+            
+    return redirect('view_cart')
+
+
+@user_not_registered_redirect
+@login_required
+def remove_from_cart(request, item_id):
+    cart = Cart.objects.filter(user=request.user, is_active=True).false()
+    item = get_object_or_404(Item, id=item_id)
+    cart_item = get_object_or_404(CartItem, cart=cart, item=item)
+    cart_item.delete()
+    
+    return redirect('view_cart')
+

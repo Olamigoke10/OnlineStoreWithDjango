@@ -14,6 +14,7 @@
                         <li class="list-group-item d-flex justify-content-between align-items-center border-0 pb-0 ">
                         <a href="{% url 'menu_item' row.pk %}"><b><del>{{ row.meal }}</del></b></a>
                             <span class="badge bg-primary rounded-pill">{{ row.price }}</span>
+                            <span><a href="{% url 'add_to_cart' row.pk %}">Add</a></span>
                             </li>
                         <li class="list-group-item pt-0">
                         <p>{{ row.description }}</p>
@@ -22,6 +23,7 @@
                     <li class="list-group-item d-flex justify-content-between align-items-center border-0 pb-0 ">
                     <a href="{% url 'menu_item' row.pk %}"><b>{{ row.meal }}</b></a>
                         <span class="badge bg-primary rounded-pill">{{ row.price }}</span>
+                        <span><a href="{% url 'add_to_cart' row.pk %}">Add</a></span>
                     </li>
                     <li class="list-group-item pt-0">
                     <p>{{ row.description }}</p>
@@ -31,7 +33,7 @@
                 {% endfor %}
     {% endfor %}
     </ul>
-    <a href="{% url 'register' %}">Signup</a>
+    <a href="{% url 'view_cart' %}">Cart</a>
   </div>
 </main>
 {% endblock %}
