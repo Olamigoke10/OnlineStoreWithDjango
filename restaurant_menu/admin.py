@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Item
+from .models import Item, Cart, CartItem
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 
@@ -17,3 +17,5 @@ class CustomUserAdmin(UserAdmin):
 
 admin.site.unregister(User)
 admin.site.register(User, CustomUserAdmin)
+admin.site.register(Cart)
+admin.site.register(CartItem)
