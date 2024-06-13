@@ -1,11 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+{% extends 'new_main.html' %}
+
+{% block content %}
     <h2>Your Cart</h2>
     <table>
       <tr>
@@ -33,5 +28,4 @@
       {% endfor %}
     </table>
     <h3>Total Price: {{ total_price }}</h3>
-</body>
-</html>
+{% endblock %}

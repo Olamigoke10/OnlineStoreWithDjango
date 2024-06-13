@@ -1,120 +1,58 @@
 {% load static %}
 
-<div class="hero_area">
-    <div class="bg-box">
-        <img src="{% static 'images/hero_bg2.jpg' %}" alt="Image of Paneer Makhani">
+<!-- header section starts -->
+<header class="header_section" style="background-color: black;">
+    <div class="container">
+        <nav class="navbar navbar-expand-lg custom_nav-container">
+            <a class="navbar-brand" href="index.html">
+                <span>Feane</span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class=""></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="menu.html">Menu</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.html">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="book.html">Book Table</a>
+                    </li>
+                </ul>
+                <div class="user_option">
+                    {% if user.is_authenticated %}
+                        <a href="#" class="user_link">
+                            <i class="fa fa-user" aria-hidden="true"></i> Welcome, {{ user.username }}
+                        </a>
+                        <a class="cart_link" href="#">
+                            <!-- Cart Icon SVG here -->
+                        </a>
+                        <a href="{% url 'logout' %}" class="order_online">Logout</a>
+                    {% else %}
+                        <a href="">
+                            <img src="{% static 'images/Avatar.png' %}" alt="Avatar image" width="25">
+                        </a>
+                        <a href="">
+                            <img src="{% static 'images/Cart.png' %}" alt="Cart image" width="25">
+                        </a>
+                        <a href="{% url 'login' %}" class="order_online">Login</a>
+                        <a href="{% url 'register' %}" class="order_online">Sign Up</a>
+                    {% endif %}
+                    <form class="form-inline">
+                        <button class="btn my-2 my-sm-0 nav_search-btn" type="submit">
+                            <i class="fa fa-search" aria-hidden="true"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </nav>
     </div>
-    <!-- header section starts -->
-    <header class="header_section">
-        <div class="container">
-            <nav class="navbar navbar-expand-lg custom_nav-container">
-                <a class="navbar-brand" href="index.html">
-                    <span style="color:red;">R-Foods</span>
-                </a>
-
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class=""></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav mx-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" href="menu.html">Menu</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="about.html">About</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="book.html">Book Table</a>
-                        </li>
-                    </ul>
-                    <div class="user_option">
-                        {% if user.is_authenticated %}
-                            <a href="#" class="user_link">
-                                <i class="fa fa-user" aria-hidden="true"></i> Welcome, {{ user.username }}
-                            </a>
-                            <a href="{% url 'logout' %}" class="order_online">Logout</a>
-                            {% else %}
-                            <a class="cart_link" href="#">
-                                <img src="{% static 'images/avatar.png' %}" alt="Image of Avatar" width="30">
-                            </a>
-                            <a class="cart_link" href="#">
-                                <img src="{% static 'images/cart.png' %}" alt="Image of Cart"  width="30">
-                            </a> 
-                            <a href="{% url 'login' %}" class="order_online">Login</a>
-                            <a href="{% url 'register' %}" class="order_online">Sign Up</a>
-                        {% endif %}
-                        <form class="form-inline">
-                            <button class="btn my-2 my-sm-0 nav_search-btn" type="submit">
-                                <i class="fa fa-search" aria-hidden="true"></i>
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </nav>
-        </div>
-    </header>
-    <!-- end header section -->
-
-    <!-- slider section -->
-    <section class="slider_section">
-        <div id="customCarousel1" class="carousel slide" data-ride="carousel" data-interval="3000">
-            <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-md-7 col-lg-6">
-                                <div class="detail-box">
-                                    <h1>Exquisite Delights Cuisines.</h1>
-                                    <p>Experience the symphony of flavors at R-Foods, where we serve passion on a plate. Our menu, crafted with love and creativity, offers a diverse range of dishes that promise to tantalize your taste buds. Join us on this culinary journey and savor the essence of fine dining in every bite.</p>
-                                    
-                                    <div class="btn-box">
-                                        <a href="" class="btn1">Order Now</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-md-7 col-lg-6">
-                                <div class="detail-box">
-                                    <h1>About Our Restaurant</h1>
-                                    <p>At R-Foods, we believe in the power of food to bring people together. Our restaurant, nestled in the heart of the city, offers a warm and inviting space for you to enjoy our diverse menu. We're passionate about serving dishes that are as pleasing to the eye as they are to the palate. To learn more about our story and what makes us unique...
-                                    <div class="btn-box">
-                                        <a href="" class="btn1">Read More...</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-md-7 col-lg-6">
-                                <div class="detail-box">
-                                    <h1>Contact Us</h1>
-                                    <p>We'd love to hear from you! Whether you have a question about our menu, want to make a reservation, or simply want to share your experience at Exquisite Delights, feel free to get in touch. You can reach us at our email address, through our social media pages, or by filling out the contact form on our website. We look forward to hearing from you!</p>
-                                    <div class="btn-box">
-                                        <a href="" class="btn1">Contact Us</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="container">
-                <ol class="carousel-indicators">
-                    <li data-target="#customCarousel1" data-slide-to="0" class="active"></li>
-                    <li data-target="#customCarousel1" data-slide-to="1"></li>
-                    <li data-target="#customCarousel1" data-slide-to="2"></li>
-                </ol>
-            </div>
-        </div>
-    </section>
-    <!-- end slider section -->
-</div>
+</header>
