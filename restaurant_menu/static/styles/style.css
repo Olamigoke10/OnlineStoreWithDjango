@@ -59,7 +59,7 @@ overflow: hidden;
 }
   
 /* General form container styling */
-.form_container {
+/* .form_container {
     width: 100%;
     max-width: 400px;
     margin: 0 auto;
@@ -68,23 +68,23 @@ overflow: hidden;
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     font-family: Arial, sans-serif;
-}
+} */
 
 /* Form group styling */
-.form_group {
+/* .form_group {
     margin-bottom: 1.5rem;
-}
+} */
 
 /* Label styling */
-.form_group label {
+/* .form_group label {
     display: block;
     margin-bottom: 0.5rem;
     color: #333;
     font-weight: bold;
-}
+} */
 
 /* Input field styling */
-.form_group input {
+/* .form_group input {
     width: 100%;
     padding: 0.8rem;
     border: 1px solid #ccc;
@@ -93,13 +93,13 @@ overflow: hidden;
     color: #333;
     background-color: #fff;
     transition: border-color 0.3s ease;
-}
+} */
 
 /* Input field focus styling */
-.form_group input:focus {
+/* .form_group input:focus {
     border-color: #007BFF;
     outline: none;
-}
+} */
 
 /* Button styling */
 .login-btn {
@@ -498,7 +498,7 @@ overflow: hidden;
 }
 
 /* Sign up forms styles */
-.main-container {
+/* .main-container {
   position: relative;
 }
 .main-container::before {
@@ -516,7 +516,7 @@ overflow: hidden;
   z-index: -1;   
 }
 .form-container {
-  width: 350px;
+  width: 30%;
   height: auto;
   background: linear-gradient(to left, orange, #fff);
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
@@ -650,4 +650,125 @@ overflow: hidden;
 .google-icon {
   font-size: 18px;
   margin-bottom: 1px;
+} */
+/* Base container for centering the form */
+.main-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-image: url('../images/form_bckg.jpg'); /* Path to background image */
+  background-size: cover;
+  background-position: center;
+}
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-image: url('../images/mashup.jpg'); /* Path to background image */
+  background-size: cover;
+  background-position: center;
+}
+
+/* Styling for the form container */
+.form-container {
+  width: 350px; 
+  background: linear-gradient(to left, orange, #fff);
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 15px 15px;
+  padding: 20px;
+  border-radius: 8px; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.login_form-container {
+  width: 350px; 
+  background: linear-gradient(to left, orange, #fff);
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 15px 15px;
+  padding: 50px;
+  border-radius: 8px; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.login_form-container .title {
+  text-align: center;
+  font-family: cursive;
+  text-decoration: underline;
+  font-size: 15px;
+}
+.form-container .title{
+  text-align: center;
+  font-family: cursive;
+  text-decoration: underline;
+  font-size: 15px;
+}
+
+/* Common styles for input fields */
+.input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc; 
+  border-radius: 4px;
+}
+
+/* Styling for buttons */
+.button, .login-btn, .form-btn {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* Specific styles for login button */
+.login-btn {
+  background-color: #E53935;
+}
+
+/* Specific styles for sign-up button */
+.form-btn {
+  background-color: #4CAF50;
+}
+
+/* Error message styling */
+.error {
+  color: #E53935;
+  margin-bottom: 10px;
+}
+
+/*Auth action  */
+.auth_action{
+  display: flex;
+  align-items: baseline;
+}
+.auth_action a{
+  color: #0056b3;
+  text-decoration: underline;
+}
+/* Additional styles for social login buttons */
+.apple-login-button, .google-login-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.apple-login-button {
+  background-color: #000;
+  color: #fff;
+}
+
+.google-login-button {
+  background-color: #4285F4;
+  color: #fff;
+}
+
+/* SVG icon styles */
+.apple-icon, .google-icon {
+  margin-right: 8px;
 }
