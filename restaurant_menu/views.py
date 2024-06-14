@@ -119,13 +119,31 @@ def update_cart_item(request, item_id):
     return redirect('view_cart')
 
 
+
+from django.http import Http404
+
+def get_user_cart(user):
+    try:
+        return Cart.objects.get(user=user)
+    except Cart.DoesNotExist:
+        raise Http404("Cart does not exist")
+
+
+
 @user_not_registered_redirect
 @login_required
 def remove_from_cart(request, item_id):
-    cart = Cart.objects.filter(user=request.user, is_active=True).false()
     item = get_object_or_404(Item, id=item_id)
-    cart_item = get_object_or_404(CartItem, cart=cart, item=item)
+    cart = get_user_cart(request.user)  # This is a hypothetical function to get the user's cart.
+
+    # Assuming cart and item should uniquely identify a CartItem
+    cart_item = CartItem.objects.filter(cart=cart, item=item).first()
+
+    if not cart_item:
+        # Handle case where no cart item is found
+        raise Http404("Cart item not found")
+
+    # Proceed with removing the item from the cart
     cart_item.delete()
-    
     return redirect('view_cart')
 

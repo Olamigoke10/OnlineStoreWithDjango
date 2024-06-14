@@ -43,12 +43,17 @@ class Cart(models.Model):
         total = sum(item.get_total_price() for item in self.cartitem_set.all())
         return total
 
+
 # New CartItem Model
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
     date_added = models.DateTimeField(auto_now_add=True)
+    
+    
+    class Meta:
+        unique_together = ('cart', 'item')
 
     def __str__(self):
         return f"{self.quantity} of {self.item.meal} in cart {self.cart.id}"
