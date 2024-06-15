@@ -1,8 +1,14 @@
 {% extends 'new_main.html' %}
+{% load static %}
 
 {% block content %}
-<h2>Your Cart</h2>
-<table>
+<div class="cart-header">
+    <img src="{% static 'images/food_tray.png' %}" alt="Food_tray image" width="40"> 
+    <h2>
+        Your Cart
+    </h2>
+</div>
+<table class="cart-table">
     <tr>
         <th>Item</th>
         <th>Quantity</th>
@@ -24,12 +30,16 @@
         <td>{{ item.item.price }}</td>
         <td id="item-total-{{ item.item.id }}">{{ item.get_total_price }}</td>
         <td>
-            <a href="{% url 'remove_from_cart' item.item.id %}">Remove</a>
+            <a href="{% url 'remove_from_cart' item.item.id %}"> <img src="{% static 'images/trashbin.png' %}" alt="Trashbin image" width="40"> </a>
         </td>
     </tr>
     {% endfor %}
 </table>
-<h3>Total Price: <span id="total-price">{{ total_price }}</span></h3>
+<div class="price-order">
+    <h3>Total Price: <span id="total-price">{{ total_price }}</span></h3>
+    <button type="button">Order now</button>
+</div>
+
 
 <script>
   function updateQuantity(itemId, delta) {

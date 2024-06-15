@@ -772,3 +772,52 @@ overflow: hidden;
 .apple-icon, .google-icon {
   margin-right: 8px;
 }
+
+/* Cart Page styles */
+/* Cart Page styles */
+.cart-header{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ff6347; /* Tomato color for the header */
+}
+
+.cart-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Courier New', Courier, monospace;
+    background-color: #333;
+    color: #fff;
+}
+
+.cart-table th, .cart-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.cart-table th {
+    background-color: #f2f2f2;
+    color: black;
+}
+
+.quantity-form button {
+    background-color: #ff6347;
+    border-radius: 6px;
+    outline: none;
+    color: #fff;
+}
+.price-order{
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+.price-order > button{
+  background-color: #ff6347;
+  font-family: 'Courier New', Courier, monospace;
+  color: #fff;
+  outline: none;
+  border: 2px solid #000;
+  border-radius: 4px;
+  width: 7rem;
+  height: 40px;
+}
