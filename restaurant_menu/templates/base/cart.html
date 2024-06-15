@@ -18,7 +18,7 @@
                 {% csrf_token %}
                 <button type="button" onclick="updateQuantity({{ item.item.id }}, -1)" aria-label="Decrease quantity">-</button>
                 <input type="number" name="quantity" id="quantity-{{ item.item.id }}" value="{{ item.quantity }}" min="1" readonly>
-                <button type="button" onclick="updateQuantity({{ item.item.id }}, 1)" aria-label="Increase quantity">+</button>
+                <button type="button" onclick="updateQuantity({{ item.item.id }}, 1)" aria-label="Increase quantity">+</button>    
             </form>
         </td>
         <td>{{ item.item.price }}</td>
@@ -32,43 +32,45 @@
 <h3>Total Price: <span id="total-price">{{ total_price }}</span></h3>
 
 <script>
-    function updateQuantity(itemId, delta) {
-        const input = document.getElementById(`quantity-${itemId}`);
-        let currentQuantity = parseInt(input.value);
-        currentQuantity += delta;
+  function updateQuantity(itemId, delta) {
+      const input = document.getElementById(`quantity-${itemId}`);
+      let currentQuantity = parseInt(input.value);
+      currentQuantity += delta;
 
-        if (currentQuantity < 1) {
-            currentQuantity = 1;  // Prevent quantity less than 1
-        }
+      if (currentQuantity < 1) {
+          currentQuantity = 1;  // Prevent quantity less than 1
+      }
 
-        input.value = currentQuantity;
+      input.value = currentQuantity;
 
-        const form = document.getElementById(`quantity-form-${itemId}`);
-        const formData = new FormData(form);
+      const form = document.getElementById(`quantity-form-${itemId}`);
+      const formData = new FormData(form);
+      formData.set('quantity', currentQuantity);
 
-        fetch(form.action, {
-            method: 'POST',
-            body: formData,
-            headers: {
-                'X-CSRFToken': formData.get('csrfmiddlewaretoken')
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            document.querySelector(`#total-price`).innerText = data.total_price;
-            document.querySelector(`#item-total-${itemId}`).innerText = data.item_total;
-        })
-        .catch(error => console.error('Error:', error));
-    }
+      fetch(form.action, {
+          method: 'POST',
+          body: formData,
+          headers: {
+              'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+          }
+      })
+      .then(response => response.json())
+      .then(data => {
+          document.querySelector(`#item-total-${itemId}`).innerText = data.item_total;
+          document.querySelector(`#total-price`).innerText = data.total_price;
+      })
+      .catch(error => console.error('Error:', error));
+  }
 
-    // Prevent form submission on enter key press
-    document.querySelectorAll('input[type="number"]').forEach(input => {
-        input.addEventListener('keydown', function(event) {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-                return false;
-            }
-        });
-    });
+  // Prevent form submission on enter key press
+  document.querySelectorAll('input[type="number"]').forEach(input => {
+      input.addEventListener('keydown', function(event) {
+          if (event.key === 'Enter') {
+              event.preventDefault();
+              return false;
+          }
+      });
+  });
 </script>
+
 {% endblock %}

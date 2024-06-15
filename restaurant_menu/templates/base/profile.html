@@ -1,0 +1,42 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Your Profile</h1>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Profile Info</legend>
+            
+            <!-- Render form fields manually -->
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" value="{{ u_form.username.value }}">
+                {% if u_form.username.errors %}
+                    <div class="error">
+                        {{ u_form.username.errors }}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" value="{{ u_form.email.value }}">
+                {% if u_form.email.errors %}
+                    <div class="error">
+                        {{ u_form.email.errors }}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <!-- Repeat for other fields as necessary -->
+
+            <!-- Similarly for p_form fields -->
+        </fieldset>
+        
+        <div class="form-group">
+            <button type="submit" class="btn btn-outline-info">Update</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
