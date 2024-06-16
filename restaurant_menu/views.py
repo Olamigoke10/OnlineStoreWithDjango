@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Item, MEAL_TYPE, Cart, CartItem, Profile
-from .forms import SignUpForm, LoginForm, ProfileUpdateForm, UserUpdateForm
+from .forms import SignUpForm, LoginForm, ProfileUpdateForm, UserUpdateForm, ReviewForm
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -26,7 +26,24 @@ def menu_list(request):
 
 def menu_item_detail(request, pk):
     item = get_object_or_404(Item, pk=pk)
-    return render(request, 'base/menu_item_detail.html', {'object': item})
+    reviews = item.reviews.all()
+
+    if request.method == 'POST':
+        review_form = ReviewForm(request.POST)
+        if review_form.is_valid():
+            review = review_form.save(commit=False)
+            review.item = item
+            review.user = request.user
+            review.save()
+            return redirect('menu_item_detail', pk=item.pk)
+    else:
+        review_form = ReviewForm()
+
+    return render(request, 'base/menu_item_detail.html', {
+        'object': item,
+        'reviews': reviews,
+        'review_form': review_form
+    })
 
 
 def register(request):
@@ -35,8 +52,10 @@ def register(request):
         if form.is_valid():
             form.save()
             username = form.cleaned_data.get('username')
+            first_name = form.cleaned_data.get('first_name')
+            last_name = form.cleaned_data.get('last_name')
             raw_password = form.cleaned_data.get('password1')
-            user = authenticate(username=username, password=raw_password)
+            user = authenticate(first_name=first_name, last_name=last_name, username=username, password=raw_password)
             login(request, user)
             return redirect('home')
     else:
@@ -169,23 +188,43 @@ def remove_from_cart(request, item_id):
 @login_required
 def profile(request):
     user_profile, created = Profile.objects.get_or_create(user=request.user)
+    
     if request.method == 'POST':
         u_form = UserUpdateForm(request.POST, instance=request.user)
         p_form = ProfileUpdateForm(request.POST, instance=request.user.profile)
-        
         
         if u_form.is_valid() and p_form.is_valid():
             u_form.save()
             p_form.save()
             return redirect('profile')
-        
     else:
         u_form = UserUpdateForm(instance=request.user)
         p_form = ProfileUpdateForm(instance=request.user.profile)
             
     context = {
+        'user': request.user,
         'u_form': u_form,
         'p_form': p_form
     }
         
     return render(request, 'base/profile.html', context)
+
+
+
+@login_required
+def add_review(request, item_id):
+    item = get_object_or_404(Item, id=item_id)
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.item = item
+            review.user = request.user
+            review.save()
+            return redirect('menu_item_detail', pk=item_id)
+    else:
+        form = ReviewForm()
+    
+    return render(request, 'base/add_review.html', {'form':form, 'item':item})    
+    
+    

@@ -73,3 +73,14 @@ class CartItem(models.Model):
 
     def get_total_price(self):
         return self.item.price * self.quantity
+    
+    
+class Review(models.Model):
+    item = models.ForeignKey(Item, on_delete=models.CASCADE, related_name='reviews')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    rating = models.IntegerField()
+    comment = models.TextField(blank=True, null=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Review for {self.item} by {self.user.username}'
