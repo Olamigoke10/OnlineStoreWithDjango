@@ -100,6 +100,9 @@ def view_cart(request):
     
     return render(request, 'base/cart.html', context)
 
+def contactUs(request):
+    return render(request, 'base/contact.html')
+
 
 @user_not_registered_redirect
 @login_required
