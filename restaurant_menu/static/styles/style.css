@@ -411,17 +411,27 @@ overflow: hidden;
   justify-content: center;
   align-items: center;
   height: 100%;
+<<<<<<< HEAD
   background-image: url('../images/form_bckg.jpg'); /* Path to background image */
+=======
+  background-image: url('../images/form_bckg.jpg');
+>>>>>>> 72583a098e699ea1c99953da5a72af2d11e13d99
   background-size: cover;
   background-position: center;
 }
 .login-container {
   display: flex;
+  width: 100%;
   justify-content: center;
   align-items: center;
+<<<<<<< HEAD
   height: 100%;
   height: 500px;
   background-image: url('../images/mashup.jpg'); /* Path to background image */
+=======
+  height: 500px;
+  background-image: url('../images/mashup.jpg');
+>>>>>>> 72583a098e699ea1c99953da5a72af2d11e13d99
   background-size: cover;
   background-position: center;
 }
