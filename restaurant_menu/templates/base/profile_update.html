@@ -1,0 +1,17 @@
+{% extends 'new_main.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4 text-center text-info">Update Your Profile</h1>
+    <form method="POST" enctype="multipart/form-data" class="bg-light p-4 shadow rounded">
+        {% csrf_token %}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4 text-secondary">Profile Info</legend>
+            
+            {{ form.as_p }}
+
+        </fieldset>
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+    </form>
+</div>
+{% endblock %}

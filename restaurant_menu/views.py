@@ -1,6 +1,6 @@
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Item, MEAL_TYPE, Cart, CartItem, Profile
+from .models import Item, MEAL_TYPE, Cart, CartItem, Profile, Order, OrderItem
 from .forms import SignUpForm, LoginForm, ProfileUpdateForm, UserUpdateForm, ReviewForm
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -169,16 +169,20 @@ def get_user_cart(user):
 @login_required
 def remove_from_cart(request, item_id):
     item = get_object_or_404(Item, id=item_id)
-    cart = get_user_cart(request.user)  # This is a hypothetical function to get the user's cart.
+    cart = get_user_cart(request.user)  # Replace with your logic to get user's cart
 
-    # Assuming cart and item should uniquely identify a CartItem
-    cart_item = CartItem.objects.filter(cart=cart, item=item).first()
-
-    if not cart_item:
-        # Handle case where no cart item is found
+    try:
+        cart_item = CartItem.objects.get(cart=cart, item=item)
+    except CartItem.DoesNotExist:
         raise Http404("Cart item not found")
+    except CartItem.MultipleObjectsReturned:
+        # Handle the case where multiple CartItems are found (should not happen ideally)
+        # Log an error or choose which one to delete
+        # For simplicity, you can delete all instances found
+        CartItem.objects.filter(cart=cart, item=item).delete()
+        return redirect('view_cart')
 
-    # Proceed with removing the item from the cart
+    # Delete the single CartItem found
     cart_item.delete()
     return redirect('view_cart')
 
@@ -210,6 +214,19 @@ def profile(request):
     return render(request, 'base/profile.html', context)
 
 
+@login_required
+def profile_update(request):
+    if request.method == 'POST':
+        form = ProfileUpdateForm(request.POST, instance=request.user.profile)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')  # Redirect to profile page after successful update
+    else:
+        form = ProfileUpdateForm(instance=request.user.profile)
+    
+    return render(request, 'base/profile_update.html', {'form': form})
+
+
 
 @login_required
 def add_review(request, item_id):
@@ -226,5 +243,34 @@ def add_review(request, item_id):
         form = ReviewForm()
     
     return render(request, 'base/add_review.html', {'form':form, 'item':item})    
-    
+
+
+
+def place_order(request):
+    if request.method == "POST":
+        user = request.user
+        cart = get_object_or_404(Cart, user=user, is_active=True)
+        if not cart.cartitem_set.exists():
+            return JsonResponse({'error': 'Cart is empty'}, status=400)
+
+        # Create order
+        order = Order.objects.create(user=user, total_price=cart.get_total_price())
+
+        # Add items to order
+        for cart_item in cart.cartitem_set.all():
+            OrderItem.objects.create(
+                order=order,
+                item=cart_item.item,
+                quantity=cart_item.quantity,
+                price=cart_item.item.price
+            )
+
+        # Clear the cart
+        cart.cartitem_set.all().delete()
+        cart.is_active = False
+        cart.save()
+
+        return JsonResponse({'success': 'Order placed successfully', 'order_id': order.id})
+
+    return redirect('cart')  
     
