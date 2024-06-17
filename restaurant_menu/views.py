@@ -64,6 +64,9 @@ def logoutUser(request):
     logout(request)
     return redirect('home')
 
+def contactUs(request):
+    return render(request, 'base/contact.html')
+
 
 @user_not_registered_redirect
 @login_required
