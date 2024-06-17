@@ -706,3 +706,74 @@ input[type=submit]:hover {
     flex-wrap: wrap;
   }
 }
+
+/* Profile Styles */
+.profile-title {
+  color: orange;
+}
+.profile-card {
+  max-width: 500px;
+  margin: auto;
+  border-top: 4px solid #e9a33a;
+}
+.profile-header {
+  text-align: center;
+  border-bottom: 2px solid #eee;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+}
+.profile-username {
+  color: #6d4c41;
+  font-size: 24px;
+  font-weight: bold;
+}
+.profile-email {
+  color: #6d4c41;
+  font-size: 18px;
+}
+.profile-member-since {
+  font-size: 16px;
+  color: #888;
+  margin-top: 20px;
+}
+.profile-picture {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin-top: 20px;
+}
+.profile-edit-btn {
+  background-color: #e9a33a;
+  color: white;
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-top: 30px;
+  font-size: 18px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+.profile-edit-btn:hover {
+  background-color: #da7929;
+}
+
+/* Profile Edit styles */
+.profile-form {
+  max-width: 500px;
+  margin: auto;
+  border-top: 4px solid #e9a33a;
+}
+.btn-save-changes {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-top: 20px;
+  font-size: 18px;
+  border-radius: 5px;
+  background-color: #e9a33a;
+  color: white;
+  transition: background-color 0.3s ease;
+}
+.btn-save-changes:hover {
+  background-color:#da7929;
+}
