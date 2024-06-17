@@ -1,0 +1,31 @@
+{% extends 'new_main.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4 text-center text-info">Your Profile</h1>
+    <form method="POST" enctype="multipart/form-data" class="bg-light p-4 shadow rounded">
+        {% csrf_token %}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4 text-secondary">Profile Info</legend>
+            
+            <!-- Display Username as plain text -->
+            <div class="form-group row mb-3">
+                <label for="username" class="col-sm-2 col-form-label text-end">Username:</label>
+                <div class="col-sm-10">
+                    <p class="form-control-plaintext">{{ user.username }}</p>
+                </div>
+            </div>
+            
+            <!-- Display Email as plain text -->
+            <div class="form-group row mb-3">
+                <label for="email" class="col-sm-2 col-form-label text-end">Email:</label>
+                <div class="col-sm-10">
+                    <p class="form-control-plaintext">{{ user.email }}</p>
+                </div>
+            </div>
+
+            <!-- Additional form fields for Profile can be added here -->
+        </fieldset>
+    </form>
+</div>
+{% endblock %}

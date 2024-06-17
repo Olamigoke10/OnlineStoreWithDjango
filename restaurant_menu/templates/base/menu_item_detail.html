@@ -1,8 +1,36 @@
+
 {% extends 'new_main.html' %}
 {% block content %}
-<div class="container">
-    <h2> {{ item.meal }} </h2>
-    <p> {{ item.description }} </p>
-    <p> {{ item.price }} </p>
+<h2> {{ item.meal }} </h2>
+<p> {{ item.description }} </p>
+<p> {{ item.price }} </p>
+    <h1>{{ object.meal }}</h1>
+    <img src="{{ object.image.url }}" alt="{{ object.meal }}" class="img-fluid">
+    <p>{{ object.description }}</p>
+    <p><strong>Price:</strong> ${{ object.price }}</p>
+
+    <h2>Reviews</h2>
+    <div class="reviews">
+        {% for review in reviews %}
+            <div class="review">
+                <p><strong>{{ review.user.username }}:</strong></p>
+                <p>Rating: {{ review.rating }} / 5</p>
+                <p>{{ review.comment }}</p>
+                <p class="text-muted">{{ review.date_created }}</p>
+            </div>
+        {% empty %}
+            <p>No reviews yet.</p>
+        {% endfor %}
     </div>
+
+    {% if user.is_authenticated %}
+        <h3>Leave a Review</h3>
+        <form method="POST">
+            {% csrf_token %}
+            {{ review_form.as_p }}
+            <button type="submit" class="btn btn-primary">Submit Review</button>
+        </form>
+    {% else %}
+        <p>You must be <a href="{% url 'login' %}">logged in</a> to leave a review.</p>
+    {% endif %}
 {% endblock %}

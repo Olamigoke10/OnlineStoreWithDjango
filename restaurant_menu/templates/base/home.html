@@ -1,37 +1,34 @@
 {% extends 'main.html' %}
 
 {% block content %}
-
 <main class="layout layout--3">
-<div class="container">
-<h1>Restaurant Menu</h1>
+  <div class="container">
+    <h1>Restaurant Menu</h1>
     <ul class="list-group list-group-flush">
-    {% for meal in meals %}
-        <h2 class="pt-5"> {{ meal.1 }}</h2>
-            {% for row in object_list %}
-                {% if row.meal_type == meal.0 %}
-                    {% if row.status == 0 %}
-                        <li class="list-group-item d-flex justify-content-between align-items-center border-0 pb-0 ">
-                        <a href="{% url 'menu_item' row.pk %}"><b><del>{{ row.meal }}</del></b></a>
-                            <span class="badge bg-primary rounded-pill">{{ row.price }}</span>
-                            <span><a href="{% url 'add_to_cart' row.pk %}">Add</a></span>
-                            </li>
-                        <li class="list-group-item pt-0">
-                        <p>{{ row.description }}</p>
-                        </li>
-                    {% else %}
-                    <li class="list-group-item d-flex justify-content-between align-items-center border-0 pb-0 ">
-                    <a href="{% url 'menu_item' row.pk %}"><b>{{ row.meal }}</b></a>
-                        <span class="badge bg-primary rounded-pill">{{ row.price }}</span>
-                        <span><a href="{% url 'add_to_cart' row.pk %}">Add</a></span>
-                    </li>
-                    <li class="list-group-item pt-0">
-                    <p>{{ row.description }}</p>
-                    </li>
-                    {% endif %}
+      {% for meal in meals %}
+        <h2 class="pt-5">{{ meal.1 }}</h2>
+        {% for row in object_list %}
+          {% if row.meal_type == meal.0 %}
+            <li class="list-group-item d-flex justify-content-between align-items-center border-0 pb-0">
+              <a href="{% url 'menu_item_detail' row.pk %}">
+                {% if row.status == 0 %}
+                  <b><del>{{ row.meal }}</del></b>
+                {% else %}
+                  <b>{{ row.meal }}</b>
                 {% endif %}
-                {% endfor %}
-    {% endfor %}
+              </a>
+              {% if row.image %}
+                <img src="{{ row.image.url }}" alt="{{ row.meal }}" style="width: 100px; height: auto;">
+              {% endif %}
+              <span class="badge bg-primary rounded-pill">{{ row.price }}</span>
+              <span><a href="{% url 'add_to_cart' row.pk %}">Add</a></span>
+            </li>
+            <li class="list-group-item pt-0">
+              <p>{{ row.description }}</p>
+            </li>
+          {% endif %}
+        {% endfor %}
+      {% endfor %}
     </ul>
     <a href="{% url 'view_cart' %}">Cart</a>
   </div>

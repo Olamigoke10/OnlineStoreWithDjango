@@ -15,16 +15,29 @@ STATUS = (
     (1, "Available"),
 )
 
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    address = models.CharField(max_length=255, blank=True)
+    city = models.CharField(max_length=100, blank=True)
+    state = models.CharField(max_length=100, blank=True)
+    zip_code = models.CharField(max_length=10, blank=True)
+    phone_number = models.CharField(max_length=15, blank=True)
+
+    def __str__(self):
+        return f'{self.user.username} Profile'
+
+
 class Item(models.Model):
     meal = models.CharField(max_length=1000, unique=True)
     description = models.CharField(max_length=2000)
-    price = models.DecimalField(max_digits=10,decimal_places=2)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
     meal_type = models.CharField(max_length=200, choices=MEAL_TYPE)
     author = models.ForeignKey(User, on_delete=models.PROTECT)
     status = models.IntegerField(choices=STATUS, default=0)
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
-
+    image = models.ImageField(upload_to='menu_images/', null=True, blank=True)  # Add this line
 
     def __str__(self):
         return self.meal
@@ -60,3 +73,14 @@ class CartItem(models.Model):
 
     def get_total_price(self):
         return self.item.price * self.quantity
+    
+    
+class Review(models.Model):
+    item = models.ForeignKey(Item, on_delete=models.CASCADE, related_name='reviews')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    rating = models.IntegerField()
+    comment = models.TextField(blank=True, null=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Review for {self.item} by {self.user.username}'
