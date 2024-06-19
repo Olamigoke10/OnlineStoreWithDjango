@@ -48,3 +48,17 @@ class ForgotPasswordForm(DjangoPasswordResetForm):
 class SetPasswordForm(DjangoSetPasswordForm):
     new_password1 = forms.CharField(label=("New password"), widget=forms.PasswordInput)
     new_password2 = forms.CharField(label=("Confirm new password"), widget=forms.PasswordInput)
+    
+class ContactForm(forms.Form):
+    first_name = forms.CharField(max_length=100, widget=forms.TextInput(attrs={
+        'placeholder': 'Your name..', 'required': True
+    }))
+    last_name = forms.CharField(max_length=100, widget=forms.TextInput(attrs={
+        'placeholder': 'Your last name..', 'required': True
+    }))
+    email = forms.EmailField(widget=forms.EmailInput(attrs={
+        'placeholder': 'Your Email..', 'required': True
+    }))
+    subject = forms.CharField(widget=forms.Textarea(attrs={
+        'placeholder': 'Write something..', 'style': 'height:100px', 'required': True
+    }))

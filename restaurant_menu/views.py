@@ -2,7 +2,7 @@ from django.http import Http404
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Item, MEAL_TYPE, Cart, CartItem, Profile, Order, OrderItem
-from .forms import SignUpForm, LoginForm, ProfileUpdateForm, UserUpdateForm, ReviewForm, ForgotPasswordForm, SetPasswordForm
+from .forms import SignUpForm, LoginForm, ProfileUpdateForm, UserUpdateForm, ReviewForm, ContactForm, ForgotPasswordForm, SetPasswordForm
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -13,6 +13,8 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.contrib.auth.tokens import default_token_generator
 from functools import wraps
+from datetime import datetime, timedelta
+from django.utils import timezone
 from django.http import JsonResponse, HttpResponse
 from django.conf import settings
 
@@ -234,12 +236,11 @@ def update_cart_item(request, item_id):
 
 
 def get_user_cart(user):
-    carts = Cart.objects.filter(user=user, is_active=True)
-    if carts.count() > 1:
-        # Log a warning or handle this as you see fit
-        # For simplicity, let's just deactivate all but one
-        carts.exclude(pk=carts.first().pk).update(is_active=False)
-    return carts.first()
+    try:
+        return Cart.objects.get(user=user, is_active=True)
+    except Cart.DoesNotExist:
+        raise Http404("Cart does not exist")
+
 
 
 @user_not_registered_redirect
@@ -326,10 +327,19 @@ def place_order(request):
         cart = get_object_or_404(Cart, user=user, is_active=True)
         if not cart.cartitem_set.exists():
             return JsonResponse({'error': 'Cart is empty'}, status=400)
+        
+        estimated_delivery = datetime.now() + timedelta(hours=1) 
 
-        # Create order
+        # Calculate total price
+        total_price = cart.get_total_price()
+
+        # Create the order
         order = Order.objects.create(
-            user=user, total_price=cart.get_total_price())
+            user=user, 
+            total_price=total_price,
+            status='Pending',  # Initial status
+            estimated_delivery= estimated_delivery  
+        )
 
         # Add items to order
         for cart_item in cart.cartitem_set.all():
@@ -345,6 +355,44 @@ def place_order(request):
         cart.is_active = False
         cart.save()
 
-        return JsonResponse({'success': 'Order placed successfully', 'order_id': order.id})
+        # Create a new empty cart for the user
+        Cart.objects.create(user=user, is_active=True)
 
-    return redirect('cart')
+        return JsonResponse({'success': 'Order placed successfully', 'order_id': order.id})
+    
+    
+@login_required
+def order_history(request):
+    orders = Order.objects.filter(user=request.user).order_by('-created_at')
+    return render(request, 'base/order_history.html', {'orders': orders})
+
+
+@login_required
+def order_details(request, order_id):
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+    return render(request, 'base/order_details.html', {'order': order})
+
+    
+    
+def contact_view(request):
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            # Process the form data
+            first_name = form.cleaned_data['first_name']
+            last_name = form.cleaned_data['last_name']
+            email = form.cleaned_data['email']
+            subject = form.cleaned_data['subject']
+
+            # Optionally, send an email or save data to the database
+            # For now, let's just print it to the console
+            print(f"Received contact form: {first_name} {last_name}, Email: {email}, Subject: {subject}")
+
+            # Redirect to a 'thank you' page or the same page with a success message
+            return redirect('thank_you')  # Replace with your URL name or path
+
+    else:
+        form = ContactForm()
+
+    return render(request, 'contact', {'form': form})
+    

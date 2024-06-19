@@ -1,0 +1,12 @@
+{% extends "new_main.html" %}
+{% block content %}
+<h2>Order History</h2>
+<ul>
+    {% for order in orders %}
+        <li>
+            <a href="{% url 'order_detail' order.id %}">Order {{ order.id }} - {{ order.status }}</a>
+            - {{ order.created_at }} - ${{ order.total_price }}
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}
