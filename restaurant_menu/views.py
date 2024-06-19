@@ -1,15 +1,24 @@
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Item, MEAL_TYPE, Cart, CartItem, Profile, Order, OrderItem
-from .forms import SignUpForm, LoginForm, ProfileUpdateForm, UserUpdateForm, ReviewForm, ContactForm
+from .models import Item, MEAL_TYPE, Cart, CartItem, Profile, Order, OrderItem, ORDER_STATUS, Video
+from .forms import SignUpForm, LoginForm, ProfileUpdateForm, UserUpdateForm, ReviewForm, ContactForm, OrderFilterForm , VideoForm, FeedbackForm
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from functools import wraps
 from django.http import JsonResponse
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from django.utils import timezone
+from django.contrib.auth.decorators import user_passes_test
+from django.core.mail import send_mail
+from django.conf import settings
+
+
+
+def is_admin(user):
+    return user.is_authenticated and user.is_staff
+
 
 def user_not_registered_redirect(view_func):
     @wraps(view_func)
@@ -51,17 +60,31 @@ def register(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save()
             username = form.cleaned_data.get('username')
             first_name = form.cleaned_data.get('first_name')
             last_name = form.cleaned_data.get('last_name')
             raw_password = form.cleaned_data.get('password1')
-            user = authenticate(first_name=first_name, last_name=last_name, username=username, password=raw_password)
+            user = authenticate(username=username, password=raw_password)
             login(request, user)
-            return redirect('home')
+
+            # Send email to the user
+            subject = 'Welcome to Our Site'
+            message = f'Hi {first_name} {last_name}, thank you for registering on our site.'
+            from_email = settings.EMAIL_HOST_USER  # Use your own email settings from settings.py
+            to_email = [user.email]  # Assuming user.email is where you store the user's email
+
+            try:
+                send_mail(subject, message, from_email, to_email, fail_silently=False)
+                messages.success(request, 'Registration successful. Welcome to our site!')
+            except Exception as e:
+                messages.warning(request, f'Failed to send registration email. Error: {e}')
+
+            return redirect('home')  # Redirect to home after successful registration
     else:
         form = SignUpForm()
-    return render(request, 'base/signup.html', {'form':form})
+
+    return render(request, 'base/signup.html', {'form': form})
 
 def loginPage(request):
     page = 'login'
@@ -111,7 +134,7 @@ def add_cart(request, item_id):
         cart_item.quantity += 1
         cart_item.save()
         
-    return redirect('view_cart')
+    return redirect('home')
 
 
 @user_not_registered_redirect
@@ -148,7 +171,7 @@ def update_cart_item(request, item_id):
         
         # Calculate the updated total price for the item and the entire cart
         item_total = cart_item.get_total_price() if quantity > 0 else 0
-        total_price = cart.get_total_price()  # Assuming you have this method
+        total_price = cart.get_total_price() 
 
         return JsonResponse({
             'item_total': item_total,
@@ -173,7 +196,7 @@ def get_user_cart(user):
 @login_required
 def remove_from_cart(request, item_id):
     item = get_object_or_404(Item, id=item_id)
-    cart = get_user_cart(request.user)  # Replace with your logic to get user's cart
+    cart = get_user_cart(request.user)  
 
     try:
         cart_item = CartItem.objects.get(cart=cart, item=item)
@@ -256,18 +279,16 @@ def place_order(request):
         cart = get_object_or_404(Cart, user=user, is_active=True)
         if not cart.cartitem_set.exists():
             return JsonResponse({'error': 'Cart is empty'}, status=400)
-        
-        estimated_delivery = datetime.now() + timedelta(hours=1) 
 
-        # Calculate total price
-        total_price = cart.get_total_price()
+        # Calculate estimated delivery time
+        estimated_delivery = datetime.now() + timedelta(minutes=30)  # Assuming 30 minutes delivery time
 
-        # Create the order
+        # Create order
         order = Order.objects.create(
             user=user, 
-            total_price=total_price,
-            status='Pending',  # Initial status
-            estimated_delivery= estimated_delivery  
+            total_price=cart.get_total_price(),
+            status='Pending',  # Initial status set to Pending
+            estimated_delivery=estimated_delivery
         )
 
         # Add items to order
@@ -287,7 +308,12 @@ def place_order(request):
         # Create a new empty cart for the user
         Cart.objects.create(user=user, is_active=True)
 
-        return JsonResponse({'success': 'Order placed successfully', 'order_id': order.id})
+        return JsonResponse({
+            'success': 'Order placed successfully',
+            'order_id': order.id,
+            'estimated_delivery': order.estimated_delivery.strftime('%Y-%m-%d %H:%M:%S')  # Formatting for JSON response
+        })
+
     
     
 @login_required
@@ -324,4 +350,91 @@ def contact_view(request):
         form = ContactForm()
 
     return render(request, 'contact', {'form': form})
+
+
+
+def feedback_view(request):
+    if request.method == 'POST':
+        form = FeedbackForm(request.POST)
+        if form.is_valid():
+            # Get the form data
+            first_name = form.cleaned_data['first_name']
+            last_name = form.cleaned_data['last_name']
+            email = form.cleaned_data['email']
+            subject = form.cleaned_data['subject']
+
+            # Send feedback response email
+            send_mail(
+                'Thank you for your feedback',
+                'Dear {},\n\nThank you for your feedback! We appreciate you taking the time to reach out to us.\n\nBest Regards,\nR-Foods Team'.format(first_name),
+                settings.EMAIL_HOST_USER,  # This is the sender email
+                [email],  # This is the recipient email
+                fail_silently=False,
+            )
+
+            return redirect('feedback_thanks')  # Redirect to a thank you page
+    else:
+        form = FeedbackForm()
     
+    return render(request, 'base/contact.html', {'form': form})
+
+
+
+# Resturant Owners
+
+@login_required
+@user_passes_test(is_admin)
+def orders_view(request):
+    # Fetch all orders for today
+    today = timezone.now().date()
+    orders = Order.objects.filter(created_at__date=today)
+    
+    # Handle status filter if provided
+    status_filter = request.GET.get('status')
+    if status_filter:
+        orders = orders.filter(status=status_filter)
+    
+    # Update order statuses based on time criteria (every 60 seconds)
+    for order in orders:
+        if order.status == 'Pending' and timezone.now() - order.created_at >= timezone.timedelta(seconds=60):
+            order.status = 'Confirmed'
+            order.save()
+        elif order.status == 'Confirmed' and timezone.now() - order.created_at >= timezone.timedelta(seconds=120):
+            order.status = 'Delivered'
+            order.save()
+    
+    # Prepare context for rendering template
+    context = {
+        'orders': orders,
+        'status_choices': ORDER_STATUS,
+        'selected_status': status_filter
+    }
+    
+    return render(request, 'base/order_list.html', context)
+    
+    
+@user_passes_test(is_admin)
+def video_list(request):
+    videos = Video.objects.all()
+    return render(request, 'base/video_list.html', {'videos': videos})
+
+def add_video(request):
+    if request.method == 'POST':
+        form = VideoForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('video_list')  # Redirect to video list page
+    else:
+        form = VideoForm()
+    return render(request, 'base/add_video.html', {'form': form})
+
+def edit_video(request, video_id):
+    video = get_object_or_404(Video, pk=video_id)
+    if request.method == 'POST':
+        form = VideoForm(request.POST, request.FILES, instance=video)
+        if form.is_valid():
+            form.save()
+            return redirect('video_list')  # Redirect to video list page
+    else:
+        form = VideoForm(instance=video)
+    return render(request, 'base/edit_video.html', {'form': form, 'video': video})

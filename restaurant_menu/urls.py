@@ -2,6 +2,8 @@ from django.urls import path
 from . import views
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.generic import TemplateView
+
 
 
 
@@ -22,6 +24,17 @@ urlpatterns = [
     path('place_order/', views.place_order, name='place_order'),
     path('orders/', views.order_history, name='order_history'),
     path('orders/<int:order_id>/', views.order_details, name='order_detail'),
+    path('order_view/', views.orders_view, name='order_view'), 
+    
+    path('feedback/', views.feedback_view, name='feedback'),
+    path('feedback/thanks/', TemplateView.as_view(template_name="base/thanks.html"), name='feedback_thanks'),
+    
+    path('videos/', views.video_list, name='video_list'),
+    path('videos/add/', views.add_video, name='add_video'),
+    path('videos/<int:video_id>/edit/', views.edit_video, name='edit_video'),
+    
+    
+    
 ]
 
 

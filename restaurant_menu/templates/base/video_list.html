@@ -1,0 +1,14 @@
+{% extends 'new_main.html' %}
+{% block content %}
+<h2>Video List</h2>
+<ul>
+  {% for video in videos %}
+    <li>{{ video.title }} - <a href="{% url 'edit_video' video.id %}">Edit</a></li>
+  {% empty %}
+    <li>No videos found.</li>
+  {% endfor %}
+</ul>
+
+<a href="{% url 'add_video' %}">Add New Video</a>
+
+{% endblock %}

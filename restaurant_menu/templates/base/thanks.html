@@ -1,0 +1,16 @@
+<!-- thanks.html -->
+{% extends 'new_main.html' %}
+
+{% block content %}
+    <h2>Thank You for Your Feedback!</h2>
+    <p>We appreciate your time in reaching out to us.</p>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        // Automatically redirect after 10 seconds
+        setTimeout(function() {
+            window.location.href = "{% url 'home' %}";  // Replace 'home' with your desired URL name
+        }, 10000);  // 10 seconds in milliseconds (10000ms)
+    </script>
+{% endblock %}
