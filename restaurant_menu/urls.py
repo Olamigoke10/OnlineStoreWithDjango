@@ -18,7 +18,11 @@ urlpatterns = [
     path('cart/remove/<int:item_id>/', views.remove_from_cart, name="remove_from_cart"),
     path('profile/', views.profile, name="profile"),
     path('profile_update/', views.profile_update, name='profile_update'),
-    path('place_order/', views.place_order, name='place_order')
+    path('place_order/', views.place_order, name='place_order'),
+    path('forgot-password/', views.forgot_password, name="forgot_password"),
+    path('forgot-password/done/', views.send_reset_email, name="send_reset_email"),
+    path('reset-password/<uidb64>/<token>/', views.confirm_reset_password, name="confirm_reset_password"),
+    path('reset-password/done/', views.reset_password_completed, name="reset_password_completed"),
 ]
 
 
