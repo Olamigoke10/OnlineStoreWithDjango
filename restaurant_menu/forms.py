@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordResetForm as DjangoPasswordResetForm, SetPasswordForm as DjangoSetPasswordForm
 from django.contrib.auth.models import User
 from .models import Item, Profile, Review
 
@@ -40,3 +40,11 @@ class ReviewForm(forms.ModelForm):
             'comment': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Leave your comment...'}),
         }
         
+class ForgotPasswordForm(DjangoPasswordResetForm):
+    email = forms.EmailField(label=("Email"), max_length=254)
+    class Meta:
+        fields = ('email',)
+
+class SetPasswordForm(DjangoSetPasswordForm):
+    new_password1 = forms.CharField(label=("New password"), widget=forms.PasswordInput)
+    new_password2 = forms.CharField(label=("Confirm new password"), widget=forms.PasswordInput)
