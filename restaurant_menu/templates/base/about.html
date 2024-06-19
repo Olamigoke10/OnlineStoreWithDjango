@@ -6,16 +6,16 @@
         <div>
             <h1>About us.</h1>
             <div class="about-links">
-                <a href="">Our Vision</a> |
-                <a href="">R-foods Today</a> |
-                <a href="">Our History</a>
+                <a href="#vision">Our Vision</a> |
+                <a href="#today">R-foods Today</a> |
+                <a href="#history">Our History</a>
             </div>
         </div>
         <span class="hr"></span>
         {% comment %} Vision section {% endcomment %}
-        <div class="vision">
+        <div class="vision" id="vision">
             <div class="img">
-                <img src="{% static 'images/Egusi-soup.jpg' %}" alt="Food 1">
+                <img src="{% static 'images/Egusi-soup.jpg' %}" alt="Food 1" width="100%">
             </div>
             <div class="vision-write-up">
                 <img src="{% static 'images/vision-eye.png' %}" alt="Food 1">
@@ -48,38 +48,68 @@
                     Pay on Delivery</p>
             </div>
             <div>
-                <img src="{% static 'images/customer-care.png' %}" alt="" width="60">
+                <img src="{% static 'images/customer-care.png' %}" alt="" width="60" style="max-width: 50%">
                 <p>Assisting Our Customers <br>
                 for the best <br>
                 Shopping Experience</p>
             </div>
         </div>
         {% comment %} R-foods History {% endcomment %}
-        <div class="history">
+        <div class="history" id="today">
             <div>
-                <p class="sub-title1">Jumia Today</p>
-                <p class="txt1" style="margin-left: 44.5%;">In a Nutshell</p>
+                <img src="{% static 'images/hourglass.png' %}" alt="" width="60">
+                <p class="sub-title1">R-Foods Today</p>
                 <div class="today1-bg">
-					<p class="tod1">6,000,000<br>Products</p>
+					<p class="tod1"> Launches With <br> 500 Dishes.</p> 
 					<p class="tod2">13<br>African<br>Countries</p>
-					<p class="tod3">Over 50,000<br>International<br>&amp; National<br>Brands</p>
-					<p class="tod4">Over 10,000<br>Active Vendors</p><br class="clear">
-					<p class="tod5">Jumia offers the<br>widest assortment<br>at an unbeatable price</p>
-					<p class="tod6">The Pan African<br>Online Commerce</p>
-					<p class="tod7">Samsung,<br>Infinix, Innjoo,<br>Vero Moda, Jack &amp; Jones...</p>
-					<p class="tod8">Nigeria’s Biggest Online Mall</p>
+					<p class="tod3">Works With <br> Over 100<br>International<br>&amp; National<br>Hotels</p>
+					<p class="tod4">Becomes <span style="color:orange">#1</span> Food Website,<br>Nigeria</p><br class="clear">
 				</div>
                 <br class="clear">
                 <br>
                 <div class="today2-bg">
-					<p class="dot1">#1 E-Commerce<br>Website, Nigeria</p>
-					<p class="dot2">Over 4 Million<br>Subscribers</p>
-					<p class="dot3">10 Commercial<br>Events</p>
-					<p class="dot4">Many App<br>Downloads</p><br class="clear">
-					<p class="dot5">With Over 15 Million<br>Monthly Visitors</p>
-					<p class="dot6">Discover First the<br>Best Deals on Jumia</p>
-					<p class="dot7">Discover the Events<br>Changing Africa's<br>Retail Industry</p>
-					<p class="dot8">During Black Friday 2015</p>
+					<p class="dot1">Hosts 10<br>Commercial Events</p>
+					<p class="dot2">Reaches Over 10,000<br>Active Customers.</p>
+					<p class="dot3">Introduces Over 3,000<br> New Recipes.</p>
+					<p class="dot4">Expands To 20 <br>Nigerian Cities.</p><br class="clear">
+				</div>
+                <br class="clear">
+                <br>
+            </div>
+        </div>
+        <br>
+        <div class="history" id="history">
+            <div>
+                <img src="{% static 'images/time.png' %}" alt="" width="60">
+                <p class="sub-title1">History</p>
+                <div class="today1-bg">
+                    <ul>
+                        <li>
+                            <p class="tod1">2010: R-Foods opens its doors in Lagos, Nigeria, offering a unique dining experience that blends traditional Nigerian cuisine with international flavors.</p>
+                        </li>
+                        <li>
+                            <p class="tod2">2012: R-Foods introduces its signature dish, the "Blissful Jollof", which becomes an instant hit with customers.</p>
+                        </li>
+                        <li>
+                            <p class="tod3">2014: The restaurant launches its catering service, providing delicious meals for events and parties across the city.
+                        </li>
+                    </ul>
+                    <br class="clear">
+				</div>
+                <br class="clear">
+                <br>
+                <div class="today2-bg">
+                    <ul>
+                        <li>
+                            <p class="dot1">2015: R-Foods wins the "Best Restaurant in Lagos" award at the Nigerian Food Awards.</p>
+                        </li>
+                        <li>
+                            <p class="dot2">2016: The restaurant expands its menu to include vegan and gluten-free options, catering to the growing demand for healthy eating.</p>
+                        </li>
+                        <li>
+                            <p class="dot3">2017: R-Foods celebrates its 7th anniversary with a grand reopening, unveiling a newly renovated dining area and a new menu featuring contemporary Nigerian cuisine.
+                        </li>
+                    </ul><br class="clear">
 				</div>
                 <br class="clear">
                 <br>
@@ -150,6 +180,14 @@
             -moz-box-shadow: 0px 1px 17px 0px rgba(224, 224, 224, 1);
             box-shadow: 0px 1px 17px 1px rgba(224, 224, 224, 1);
         }
+        .history img{
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            background-color: #fff;
+            border: 2px solid orange;
+            border-radius: 100%
+        }
         .sub-title1 {
             font-size: 18px;
             line-height: 22px;
@@ -165,171 +203,99 @@
             padding: 0 30px;
         }
         .today1-bg {
-            background: url(https://ng.jumia.is/cms/content-pages/About/KE_W19_LP_About_Us_04.png) no-repeat 0px 0px;
-            height: 150px;
-            color: #000;
-        }
-        .tod1 {
-            margin-top: 6.5%;
-            margin-left: 4%;
-            float: left;
-            text-align: center;
-            font-size: 16px;
-            line-height: 18px;
-            font-weight: 500;
             color: #fff;
-        }
-        .tod2 {
-            margin-top: 5%;
-            margin-left: 20.3%;
-            float: left;
             text-align: center;
-            font-size: 16px;
-            line-height: 18px;
-            font-weight: 500;
-            color: #fff;
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            font-weight: bolder;
         }
-        .tod3 {
-            margin-top: 4%;
-            margin-left: 18.9%;
-            float: left;
-            text-align: center;
-            font-size: 16px;
-            line-height: 18px;
-            font-weight: 500;
+        .today2-bg {
             color: #fff;
-        }
-        .tod4 {
-            margin-top: 6.5%;
-            margin-left: 16%;
-            float: left;
             text-align: center;
-            font-size: 16px;
-            line-height: 18px;
-            font-weight: 500;
-            color: #fff;
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            font-weight: bolder;
         }
         .clear {
             clear: both;
         }
-        .tod5 {
-            margin-top: 40px;
-            margin-left: 0%;
-            float: left;
-            text-align: center;
-            font-size: 14px;
-            line-height: 16px;
-            font-weight: 400;
-        }
-        .tod6 {
-            margin-top: 40px;
-            margin-left: 13%;
-            float: left;
-            text-align: center;
-            font-size: 14px;
-            line-height: 16px;
-            font-weight: 400;
-        }
-        .tod7 {
-            margin-top: 40px;
-            margin-left: 13%;
-            float: left;
-            text-align: center;
-            font-size: 14px;
-            line-height: 16px;
-            font-weight: 400;
-        }
-        .tod8 {
-            margin-top: 40px;
-            margin-left: 10%;
-            float: left;
-            text-align: center;
-            font-size: 14px;
-            line-height: 16px;
-            font-weight: 400;
-        }
+         /* Add media queries for responsiveness */
 
-        .dot1 {
-            margin-top: 6%;
-            margin-left: 1%;
-            float: left;
-            text-align: center;
-            font-size: 16px;
-            line-height: 18px;
-            font-weight: 500;
-            color: #fff;
+    /* Mobile devices (portrait and landscape) */
+    @media only screen and (max-width: 767px) {
+        .img{
+            display: none;
         }
-        .dot2 {
-            margin-top: 5.5%;
-            margin-left: 17%;
-            float: left;
-            text-align: center;
-            font-size: 16px;
-            line-height: 18px;
-            font-weight: 500;
-            color: #fff;
+        .vision {
+            flex-direction: row;
+            align-items: center;
         }
-        .dot3 {
-            margin-top: 5.5%;
-            margin-left: 17%;
-            float: left;
-            text-align: center;
-            font-size: 16px;
-            line-height: 18px;
-            font-weight: 500;
-            color: #fff;
+        .guarantees {
+            flex-direction: column;
+            align-items: center;
         }
-        .dot4 {
-            margin-top: 6%;
-            margin-left: 17.3%;
-            float: left;
-            text-align: center;
-            font-size: 16px;
-            line-height: 18px;
-            font-weight: 500;
-            color: #fff;
+        .history {
+            padding: 0 15px;
         }
-        .clear {
-            clear: both;
+        .vision-write-up {
+            margin: 0 auto;
+            width: 300px
         }
-        .dot5 {
-            margin-top: 40px;
-            margin-left: 1.5%;
-            float: left;
-            text-align: center;
-            font-size: 14px;
-            line-height: 16px;
-            font-weight: 400;
+        .today1-bg{
+            flex-direction: column;
         }
-        .dot6 {
-            margin-top: 40px;
-            margin-left: 15%;
-            float: left;
-            text-align: center;
-            font-size: 14px;
-            line-height: 16px;
-            font-weight: 400;
+        .today2-bg{
+            flex-direction: column;
         }
-        .dot7 {
-            margin-top: 40px;
-            margin-left: 12%;
-            float: left;
-            text-align: center;
-            font-size: 14px;
-            line-height: 16px;
-            font-weight: 400;
+    }
+
+    /* Tablets (portrait and landscape) */
+    @media only screen and (min-width: 768px) and (max-width: 1023px) {
+        .vision {
+            flex-direction: row;
+            align-items: center;
         }
-        .dot8 {
-            margin-top: 40px;
-            margin-left: 14%;
-            float: left;
-            text-align: center;
-            font-size: 14px;
-            line-height: 16px;
-            font-weight: 400;
+        .vision-write-up {
+            margin: 0 auto;
+            width: 300px
         }
-        .clear {
-            clear: both;
+        .guarantees {
+            flex-direction: row;
+            align-items: center;
         }
+        .history {
+            padding: 0 30px;
+        }
+        .img{
+            display: none;
+        }
+        .today1-bg{
+            flex-direction: column;
+        }
+        .today2-bg{
+            flex-direction: column;
+        }
+    }
+
+    /* Desktops (large screens) */
+    @media only screen and (min-width: 1024px) {
+        .about-container {
+            flex-direction: row;
+            align-items: center;
+        }
+        .vision {
+            flex-direction: row;
+            align-items: center;
+        }
+        .guarantees {
+            flex-direction: row;
+            align-items: center;
+        }
+        .history {
+            padding: 0 60px;
+        }
+    } 
     </style>
 {% endblock  %}

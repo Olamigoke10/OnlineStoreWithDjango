@@ -4,51 +4,6 @@
 {% block content %}
 <main class="menu-layout">
   <div class="container">
-<<<<<<< HEAD
-    <h1 class="menu-title">Restaurant Menu</h1>
-    <!-- Filter buttons -->
-    <div class="filter-buttons">
-      <button onclick="filterMenu('all')">All</button>
-      <button onclick="filterMenu('starters')">Starters</button>
-      <button onclick="filterMenu('salads')">Salads</button>
-      <button onclick="filterMenu('main_dishes')">Main Dishes</button>
-      <button onclick="filterMenu('desserts')">Desserts</button>
-    </div>
-    <!-- Menu items container -->
-    <div class="menu-items">
-      {% for meal in meals %}
-        <div class="menu-category">
-          <h2 class="meal-category">{{ meal.1 }}</h2>
-          <div class="menu-cards">
-            {% for row in object_list %}
-              {% if row.meal_type == meal.0 %}
-                <div class="menu-card {{ row.meal_type }}">
-                  <a href="{% url 'menu_item_detail' row.pk %}" class="meal-link">
-                    {% if row.status == 0 %}
-                      <b><del>{{ row.meal }}</del></b>
-                    {% else %}
-                      <b>{{ row.meal }}</b>
-                    {% endif %}
-                  </a>
-                  {% if row.image %}
-                    <img src="{{ row.image.url }}" alt="{{ row.meal }}" class="meal-image">
-                  {% endif %}
-                  <p class="menu-description">{{ row.description }}</p>
-                  <div class="card-footer">
-                    <span class="price-badge">{{ row.price }}</span>
-                    <a href="{% url 'add_to_cart' row.pk %}" class="add-link">
-                      <img src="{% static 'images/cart.png'%}" alt="" width="25">
-                    </a>
-                  </div>
-                </div>
-              {% endif %}
-            {% endfor %}
-          </div>
-        </div>
-      {% endfor %}
-      <p class="disclaimer">*Disclaimer: Want to place a review of your oders? Click on the food name in the menu section above.*</p>
-    </div>
-=======
     <h1>Restaurant Menu</h1>
 
     <!-- Button Group for Meal Categories -->
@@ -97,7 +52,6 @@
       <a href="{% url 'order_view' %}">Orders</a>
       <a href="{% url 'video_list' %}">Video</a>
     {% endif %}
->>>>>>> 2680ce3ec7b7f8960b1ede46e9fb741f56dde9cd
   </div>
   <div class="mini-about">
     <div class="imgd">
@@ -147,20 +101,6 @@
 </main>
 
 <script>
-<<<<<<< HEAD
-  // JavaScript for filtering
-function filterMenu(category) {
-  var cards = document.getElementsByClassName('menu-card');
-  for (var i = 0; i < cards.length; i++) {
-    if (category === 'all' || cards[i].classList.contains(category)) {
-      cards[i].style.display = '';
-    } else {
-      cards[i].style.display = 'none';
-    }
-  }
-}
-
-=======
   // Function to show all meals
   function showAllMeals() {
     var mealSections = document.getElementsByClassName("meal-section");
@@ -185,6 +125,5 @@ function filterMenu(category) {
   document.addEventListener("DOMContentLoaded", function() {
     showAllMeals();
   });
->>>>>>> 2680ce3ec7b7f8960b1ede46e9fb741f56dde9cd
 </script>
 {% endblock %}
