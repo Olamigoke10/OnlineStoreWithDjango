@@ -1,0 +1,335 @@
+{% extends 'new_main.html' %}
+{% load static %}
+
+{% block content %}
+    <section class="about-container">
+        <div>
+            <h1>About us.</h1>
+            <div class="about-links">
+                <a href="">Our Vision</a> |
+                <a href="">R-foods Today</a> |
+                <a href="">Our History</a>
+            </div>
+        </div>
+        <span class="hr"></span>
+        {% comment %} Vision section {% endcomment %}
+        <div class="vision">
+            <div class="img">
+                <img src="{% static 'images/Egusi-soup.jpg' %}" alt="Food 1">
+            </div>
+            <div class="vision-write-up">
+                <img src="{% static 'images/vision-eye.png' %}" alt="Food 1">
+                <h5>Our Vision</h5>
+                <p>
+                    We are building the most beloved and trusted dining destination for Africans.
+                </p>
+            </div>
+        </div>
+
+        {% comment %} Guarantees section {% endcomment %}
+        <div class="guarantees">
+            <div>
+                <img src="{% static 'images/hundred-points.png' %}" alt="" width="60">
+                <p>Enjoy 100% <br>
+                    <span style="color: #f49719; ">Delicious</span> Meals <br>
+                    from Local & <br>
+                    International Chefs</p>
+            </div>
+            <div>
+                <img src="{% static 'images/pricetag.png' %}" alt=""  width="60">
+                <p>Buy Anything You <br>
+                    want online at <br>
+                    the Best Flavors</p>
+            </div>
+            <div>
+                <img src="{% static 'images/food-bowl.png' %}" alt=""  width="60">
+                <p>Search, Order on <br>
+                    all Menus, <br>
+                    Pay on Delivery</p>
+            </div>
+            <div>
+                <img src="{% static 'images/customer-care.png' %}" alt="" width="60">
+                <p>Assisting Our Customers <br>
+                for the best <br>
+                Shopping Experience</p>
+            </div>
+        </div>
+        {% comment %} R-foods History {% endcomment %}
+        <div class="history">
+            <div>
+                <p class="sub-title1">Jumia Today</p>
+                <p class="txt1" style="margin-left: 44.5%;">In a Nutshell</p>
+                <div class="today1-bg">
+					<p class="tod1">6,000,000<br>Products</p>
+					<p class="tod2">13<br>African<br>Countries</p>
+					<p class="tod3">Over 50,000<br>International<br>&amp; National<br>Brands</p>
+					<p class="tod4">Over 10,000<br>Active Vendors</p><br class="clear">
+					<p class="tod5">Jumia offers the<br>widest assortment<br>at an unbeatable price</p>
+					<p class="tod6">The Pan African<br>Online Commerce</p>
+					<p class="tod7">Samsung,<br>Infinix, Innjoo,<br>Vero Moda, Jack &amp; Jones...</p>
+					<p class="tod8">Nigeria’s Biggest Online Mall</p>
+				</div>
+                <br class="clear">
+                <br>
+                <div class="today2-bg">
+					<p class="dot1">#1 E-Commerce<br>Website, Nigeria</p>
+					<p class="dot2">Over 4 Million<br>Subscribers</p>
+					<p class="dot3">10 Commercial<br>Events</p>
+					<p class="dot4">Many App<br>Downloads</p><br class="clear">
+					<p class="dot5">With Over 15 Million<br>Monthly Visitors</p>
+					<p class="dot6">Discover First the<br>Best Deals on Jumia</p>
+					<p class="dot7">Discover the Events<br>Changing Africa's<br>Retail Industry</p>
+					<p class="dot8">During Black Friday 2015</p>
+				</div>
+                <br class="clear">
+                <br>
+            </div>
+        </div>
+    </section>
+
+    
+    <style>
+        .about-container h1{
+            text-align: center;
+            color: orange;
+            margin-top: 30px;
+        }
+        .about-links{
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            text-align: center;
+        }
+        .about-links a{
+            color: orange;
+            text-decoration: none;
+        }
+        .hr{
+            background: #f49719; 
+            width: 100%; 
+            height: 4px;
+            display: block;
+        }
+        .vision{
+            display: flex;
+            align-items: center;
+            background: #f49719; 
+            margin-top: 10px;
+        }
+        .vision img {
+            padding: 5px;
+        }
+        .vision-write-up{
+            width: 70%;
+            border: 3px solid #fff;
+            border-radius: 20px;
+            text-align: center;
+        }
+        .vision-write-up img{
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .guarantees{
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            text-align: center;
+            margin-top: 30px;
+        }
+        .history{
+            padding: 0 30px;
+        }
+        .history div{
+            height: auto;
+            background: grey;
+            padding: 20px 30px;
+            box-shadow: 5px 5px 15px 10px;
+            border-radius: 30px;
+            -webkit-box-shadow: 0px 1px 17px 0px rgba(224, 224, 224, 1);
+            -moz-box-shadow: 0px 1px 17px 0px rgba(224, 224, 224, 1);
+            box-shadow: 0px 1px 17px 1px rgba(224, 224, 224, 1);
+        }
+        .sub-title1 {
+            font-size: 18px;
+            line-height: 22px;
+            text-align: center;
+            font-weight: 400;
+            color: #f90;
+        }
+        .txt1 {
+            text-align: left;
+            font-size: 12px;
+            line-height: 20px;
+            font-weight: 400;
+            padding: 0 30px;
+        }
+        .today1-bg {
+            background: url(https://ng.jumia.is/cms/content-pages/About/KE_W19_LP_About_Us_04.png) no-repeat 0px 0px;
+            height: 150px;
+            color: #000;
+        }
+        .tod1 {
+            margin-top: 6.5%;
+            margin-left: 4%;
+            float: left;
+            text-align: center;
+            font-size: 16px;
+            line-height: 18px;
+            font-weight: 500;
+            color: #fff;
+        }
+        .tod2 {
+            margin-top: 5%;
+            margin-left: 20.3%;
+            float: left;
+            text-align: center;
+            font-size: 16px;
+            line-height: 18px;
+            font-weight: 500;
+            color: #fff;
+        }
+        .tod3 {
+            margin-top: 4%;
+            margin-left: 18.9%;
+            float: left;
+            text-align: center;
+            font-size: 16px;
+            line-height: 18px;
+            font-weight: 500;
+            color: #fff;
+        }
+        .tod4 {
+            margin-top: 6.5%;
+            margin-left: 16%;
+            float: left;
+            text-align: center;
+            font-size: 16px;
+            line-height: 18px;
+            font-weight: 500;
+            color: #fff;
+        }
+        .clear {
+            clear: both;
+        }
+        .tod5 {
+            margin-top: 40px;
+            margin-left: 0%;
+            float: left;
+            text-align: center;
+            font-size: 14px;
+            line-height: 16px;
+            font-weight: 400;
+        }
+        .tod6 {
+            margin-top: 40px;
+            margin-left: 13%;
+            float: left;
+            text-align: center;
+            font-size: 14px;
+            line-height: 16px;
+            font-weight: 400;
+        }
+        .tod7 {
+            margin-top: 40px;
+            margin-left: 13%;
+            float: left;
+            text-align: center;
+            font-size: 14px;
+            line-height: 16px;
+            font-weight: 400;
+        }
+        .tod8 {
+            margin-top: 40px;
+            margin-left: 10%;
+            float: left;
+            text-align: center;
+            font-size: 14px;
+            line-height: 16px;
+            font-weight: 400;
+        }
+
+        .dot1 {
+            margin-top: 6%;
+            margin-left: 1%;
+            float: left;
+            text-align: center;
+            font-size: 16px;
+            line-height: 18px;
+            font-weight: 500;
+            color: #fff;
+        }
+        .dot2 {
+            margin-top: 5.5%;
+            margin-left: 17%;
+            float: left;
+            text-align: center;
+            font-size: 16px;
+            line-height: 18px;
+            font-weight: 500;
+            color: #fff;
+        }
+        .dot3 {
+            margin-top: 5.5%;
+            margin-left: 17%;
+            float: left;
+            text-align: center;
+            font-size: 16px;
+            line-height: 18px;
+            font-weight: 500;
+            color: #fff;
+        }
+        .dot4 {
+            margin-top: 6%;
+            margin-left: 17.3%;
+            float: left;
+            text-align: center;
+            font-size: 16px;
+            line-height: 18px;
+            font-weight: 500;
+            color: #fff;
+        }
+        .clear {
+            clear: both;
+        }
+        .dot5 {
+            margin-top: 40px;
+            margin-left: 1.5%;
+            float: left;
+            text-align: center;
+            font-size: 14px;
+            line-height: 16px;
+            font-weight: 400;
+        }
+        .dot6 {
+            margin-top: 40px;
+            margin-left: 15%;
+            float: left;
+            text-align: center;
+            font-size: 14px;
+            line-height: 16px;
+            font-weight: 400;
+        }
+        .dot7 {
+            margin-top: 40px;
+            margin-left: 12%;
+            float: left;
+            text-align: center;
+            font-size: 14px;
+            line-height: 16px;
+            font-weight: 400;
+        }
+        .dot8 {
+            margin-top: 40px;
+            margin-left: 14%;
+            float: left;
+            text-align: center;
+            font-size: 14px;
+            line-height: 16px;
+            font-weight: 400;
+        }
+        .clear {
+            clear: both;
+        }
+    </style>
+{% endblock  %}
