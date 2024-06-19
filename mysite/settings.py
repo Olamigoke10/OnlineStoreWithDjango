@@ -151,8 +151,9 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 # Add the following configuration for email backend (example using SMTP):
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'  # Your SMTP host
-EMAIL_PORT = 587  # Your SMTP port (587 for TLS)
-EMAIL_USE_TLS = True  # True if your SMTP server requires TLS
+EMAIL_PORT = 465  # Your SMTP port (587 for TLS)
+EMAIL_USE_SSL = True
+EMAIL_USE_TLS = False  # True if your SMTP server requires TLS
 EMAIL_HOST_USER = 'olamigokeadebayo0@gmail.com'  # Your email address
-EMAIL_HOST_PASSWORD = 'grul oqta ukqe wxsl'  # Your email password or application-specific password
+EMAIL_HOST_PASSWORD = 'gruloqtaukqewxsl'  # Your email password or application-specific password
 

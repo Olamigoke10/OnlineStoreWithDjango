@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
-from .models import Item, Profile, Review
+from .models import Item, Profile, Review, Video
 
 class SignUpForm(UserCreationForm):
     email = forms.EmailField()
@@ -40,3 +40,38 @@ class ReviewForm(forms.ModelForm):
             'comment': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Leave your comment...'}),
         }
         
+class ContactForm(forms.Form):
+    first_name = forms.CharField(max_length=100, widget=forms.TextInput(attrs={
+        'placeholder': 'Your name..', 'required': True
+    }))
+    last_name = forms.CharField(max_length=100, widget=forms.TextInput(attrs={
+        'placeholder': 'Your last name..', 'required': True
+    }))
+    email = forms.EmailField(widget=forms.EmailInput(attrs={
+        'placeholder': 'Your Email..', 'required': True
+    }))
+    subject = forms.CharField(widget=forms.Textarea(attrs={
+        'placeholder': 'Write something..', 'style': 'height:100px', 'required': True
+    }))
+
+
+
+class OrderFilterForm(forms.Form):
+    STATUS_CHOICES = [
+        ('', 'All'),  # Add an 'All' option to show all orders regardless of status
+        ('pending', 'Pending'),
+        ('delivered', 'Delivered'),
+    ]
+    status = forms.ChoiceField(choices=STATUS_CHOICES, required=False, label="Order Status")
+    
+    
+class VideoForm(forms.ModelForm):
+    class Meta:
+        model = Video
+        fields = ['title', 'description', 'video_file']
+        
+class FeedbackForm(forms.Form):
+    first_name = forms.CharField(max_length=100, required=True, widget=forms.TextInput(attrs={'placeholder': 'Your first name..'}))
+    last_name = forms.CharField(max_length=100, required=True, widget=forms.TextInput(attrs={'placeholder': 'Your last name..'}))
+    email = forms.EmailField(required=True, widget=forms.EmailInput(attrs={'placeholder': 'Your email..'}))
+    subject = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Write something..', 'rows': 5}), required=True)

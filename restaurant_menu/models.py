@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 # Create your models here.
 
@@ -14,6 +15,14 @@ STATUS = (
     (0, "Unavailable"),
     (1, "Available"),
 )
+
+ORDER_STATUS = (
+    ('Pending', 'Pending'),
+    ('Confirmed', 'Confirmed'),
+    ('Delivered', 'Delivered'),
+    ('Cancelled', 'Cancelled'),
+)
+
 
 
 class Profile(models.Model):
@@ -90,9 +99,24 @@ class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
+    status = models.CharField(max_length=10, choices=ORDER_STATUS, default='Pending')
+    estimated_delivery = models.DateTimeField(null=True, blank=True) 
 
     def __str__(self):
         return f"Order {self.id} by {self.user.username}"
+    
+    def update_status(self):
+        now = timezone.now()
+        time_since_creation = now - self.created_at
+
+        if self.status == 'Pending':
+            if time_since_creation >= timezone.timedelta(minutes=1):  # Example: Change to 'Confirmed' after 1 minute for testing
+                self.status = 'Confirmed'
+                self.save()
+        elif self.status == 'Confirmed':
+            if time_since_creation >= timezone.timedelta(minutes=2):  # Example: Change to 'Delivered' after 2 minutes for testing
+                self.status = 'Delivered'
+                self.save()
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, related_name='items', on_delete=models.CASCADE)
@@ -105,3 +129,19 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return f"{self.quantity} x {self.item.meal}"
+    
+
+def default_video_file_path():
+    # Example logic to generate a default file path
+    return 'videos/default_video.mp4'
+    
+    
+class Video(models.Model):
+    title = models.CharField(max_length=255)
+    description = models.TextField(blank=True)
+    video_file = models.FileField(upload_to='videos/', default=default_video_file_path)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.title
