@@ -352,7 +352,7 @@ def contact_view(request):
     return render(request, 'contact', {'form': form})
 
 
-
+@login_required
 def feedback_view(request):
     if request.method == 'POST':
         form = FeedbackForm(request.POST)
@@ -381,6 +381,7 @@ def feedback_view(request):
 
 
 # Resturant Owners
+
 
 @login_required
 @user_passes_test(is_admin)
