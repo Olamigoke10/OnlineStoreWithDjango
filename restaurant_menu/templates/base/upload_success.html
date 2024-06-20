@@ -1,0 +1,8 @@
+<!-- upload_success.html -->
+{% extends 'new_main.html' %}
+
+{% block content %}
+    <h2>Upload Successful!</h2>
+    <p>Your menu card picture has been uploaded successfully.</p>
+    <a href="{% url 'upload_menu_card' %}">Upload another picture</a>
+{% endblock %}

@@ -1,7 +1,8 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordResetForm as DjangoPasswordResetForm, SetPasswordForm as DjangoSetPasswordForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
-from .models import Item, Profile, Review
+from .models import Item, Profile, Review, Video, MenuCard, Book
+
 
 class SignUpForm(UserCreationForm):
     email = forms.EmailField()
@@ -40,15 +41,6 @@ class ReviewForm(forms.ModelForm):
             'comment': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Leave your comment...'}),
         }
         
-class ForgotPasswordForm(DjangoPasswordResetForm):
-    email = forms.EmailField(label=("Email"), max_length=254)
-    class Meta:
-        fields = ('email',)
-
-class SetPasswordForm(DjangoSetPasswordForm):
-    new_password1 = forms.CharField(label=("New password"), widget=forms.PasswordInput)
-    new_password2 = forms.CharField(label=("Confirm new password"), widget=forms.PasswordInput)
-    
 class ContactForm(forms.Form):
     first_name = forms.CharField(max_length=100, widget=forms.TextInput(attrs={
         'placeholder': 'Your name..', 'required': True
@@ -62,3 +54,39 @@ class ContactForm(forms.Form):
     subject = forms.CharField(widget=forms.Textarea(attrs={
         'placeholder': 'Write something..', 'style': 'height:100px', 'required': True
     }))
+
+
+
+class OrderFilterForm(forms.Form):
+    STATUS_CHOICES = [
+        ('', 'All'),  # Add an 'All' option to show all orders regardless of status
+        ('pending', 'Pending'),
+        ('delivered', 'Delivered'),
+    ]
+    status = forms.ChoiceField(choices=STATUS_CHOICES, required=False, label="Order Status")
+    
+    
+class VideoForm(forms.ModelForm):
+    class Meta:
+        model = Video
+        fields = ['title', 'description', 'video_file']
+        
+class FeedbackForm(forms.Form):
+    first_name = forms.CharField(max_length=100, required=True, widget=forms.TextInput(attrs={'placeholder': 'Your first name..'}))
+    last_name = forms.CharField(max_length=100, required=True, widget=forms.TextInput(attrs={'placeholder': 'Your last name..'}))
+    email = forms.EmailField(required=True, widget=forms.EmailInput(attrs={'placeholder': 'Your email..'}))
+    subject = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Write something..', 'rows': 5}), required=True)
+    
+    
+
+class MenuCardForm(forms.ModelForm):
+    class Meta:
+        model = MenuCard
+        fields = ['title', 'image']
+        
+        
+
+class BookForm(forms.ModelForm):
+    class Meta:
+        model = Book
+        fields = ['title', 'author', 'description', 'file']

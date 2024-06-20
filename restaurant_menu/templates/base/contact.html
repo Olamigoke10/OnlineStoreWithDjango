@@ -3,7 +3,7 @@
 
 {% block content %} 
     <section class="contact-container">
-        <div  class="contact-hero">
+        <div class="contact-hero">
             <h1>Contact Us.</h1>
         </div>
         <div class="contact-headings">
@@ -11,23 +11,23 @@
             <h4>Plan Your Meals at R-Foods.</h4>
             <div class="contact-icons">
                 <div>
-                    <img src="{% static 'images/location.png' %}" alt="Your Image Description" width="30">
+                    <img src="{% static 'images/location.png' %}" alt="Location Icon" width="30">
                     <p>Our Location</p>
-                    <span>No 1, Something street, somewhere,Nigeria.</span>
+                    <span>No 1, Something street, somewhere, Nigeria.</span>
                 </div>
                 <div>
-                    <img src="{% static 'images/mail.png' %}" alt="Your Image Description" width="30">
+                    <img src="{% static 'images/mail.png' %}" alt="Mail Icon" width="30">
                     <p>Our Email</p>
                     <span>R-foods@gmail.com</span>
                 </div>
                 <div>
-                    <img src="{% static 'images/phone.png' %}" alt="Your Image Description" width="30">
+                    <img src="{% static 'images/phone.png' %}" alt="Phone Icon" width="30">
                     <p>Our Phone</p>
                     <span>080-111-222-33</span> <br>
                     <span>080-111-222-33</span>
                 </div>
                 <div>
-                    <img src="{% static 'images/clock.png' %}" alt="Your Image Description" width="30">
+                    <img src="{% static 'images/clock.png' %}" alt="Clock Icon" width="30">
                     <p>Open Hours</p>
                     <span>W - Mon - Sat</span> <br>
                     <span>09:00am - 22:00pm</span>
@@ -37,12 +37,13 @@
         <hr>
         <div class="geo-location">
             <div class="geo-form">
-                <form action="">
+                <form method="POST" action="{% url 'feedback' %}">
+                    {% csrf_token %}
                     <label for="fname">First Name</label>
-                    <input type="text" id="fname" name="firstname" placeholder="Your name.." required>
+                    <input type="text" id="fname" name="first_name" placeholder="Your name.." required>
     
                     <label for="lname">Last Name</label>
-                    <input type="text" id="lname" name="lastname" placeholder="Your last name.." required>
+                    <input type="text" id="lname" name="last_name" placeholder="Your last name.." required>
     
                     <label for="email">Email</label>
                     <input type="email" id="email" name="email" placeholder="Your Email.." required>
@@ -57,7 +58,7 @@
                 <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7914.6815659728345!2d-122.06661435413102!3d37.38733187666422!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x808fb71f7d206f4d%3A0x5d6a5d3433e0d4d4!2sCoursera!5e0!3m2!1sen!2sng!4v1694805310378!5m2!1sen!2sng" frameborder="0" loading="lazy" referrerpolicy="no-referrer-when-downgrade" height="600" width="500"></iframe>
             </div>
         </div>
-        <div class="img-gallary">
+        <div class="img-gallery">
             <h4>Follow us on top social media platforms <span>&#8212;</span> @R-foods_official.</h4>
             <div class="gallery">
                 <img src="{% static 'images/res1.jpg' %}" alt="Food 1">
@@ -67,4 +68,4 @@
             </div> 
         </div>
     </section>
-{% endblock  %}
+{% endblock %}

@@ -2,6 +2,9 @@ from django.urls import path
 from . import views
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.generic import TemplateView
+from django.contrib.auth import views as auth_views
+from .views import CustomPasswordResetView
 
 
 
@@ -12,6 +15,7 @@ urlpatterns = [
     path('login/', views.loginPage, name='login'),
     path('logout/', views.logoutUser, name="logout"),
     path('contact/', views.contactUs, name="contact"),
+    path('about/', views.aboutUs, name="about"),
     path('cart/', views.view_cart, name="view_cart"),
     path('cart/add/<int:item_id>/', views.add_cart, name="add_to_cart"),
     path('cart/update/<int:item_id>/', views.update_cart_item, name="update_cart_item"),
@@ -20,12 +24,34 @@ urlpatterns = [
     path('profile/', views.profile, name="profile"),
     path('profile_update/', views.profile_update, name='profile_update'),
     path('place_order/', views.place_order, name='place_order'),
-    path('forgot-password/', views.forgot_password, name="forgot_password"),
-    path('forgot-password/done/', views.send_reset_email, name="send_reset_email"),
-    path('reset-password/<uidb64>/<token>/', views.confirm_reset_password, name="confirm_reset_password"),
-    path('reset-password/done/', views.reset_password_completed, name="reset_password_completed"),
     path('orders/', views.order_history, name='order_history'),
     path('orders/<int:order_id>/', views.order_details, name='order_detail'),
+    path('order_view/', views.orders_view, name='order_view'), 
+    
+    path('feedback/', views.feedback_view, name='feedback'),
+    path('feedback/thanks/', TemplateView.as_view(template_name="base/thanks.html"), name='feedback_thanks'),
+    
+    path('videos/', views.video_list, name='video_list'),
+    path('videos/add/', views.add_video, name='add_video'),
+    path('videos/<int:video_id>/edit/', views.edit_video, name='edit_video'),
+    
+    path('item/<int:item_id>/', views.item_detail, name='item_detail'),
+    path('items/<int:item_id>/submit_review/', views.submit_review, name='submit_review'),
+    
+    path('password-reset/', CustomPasswordResetView.as_view(), name='password_reset'),
+    path('password-reset/done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
+    path('password-reset/confirm/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    path('password-reset/complete/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
+    
+    
+    path('upload_menu_card/', views.upload_menu_card, name='upload_menu_card'),
+    path('upload/success/', views.upload_success, name='upload_success'),
+    
+    path('upload_book/', views.upload_book, name='upload_book'),
+    path('book_list/', views.book_list, name='book_list'),
+    path('read/<int:pk>/', views.read_book, name='read_book'),
+    
+    
 ]
 
 

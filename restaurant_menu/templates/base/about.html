@@ -1,0 +1,301 @@
+{% extends 'new_main.html' %}
+{% load static %}
+
+{% block content %}
+    <section class="about-container">
+        <div>
+            <h1>About us.</h1>
+            <div class="about-links">
+                <a href="#vision">Our Vision</a> |
+                <a href="#today">R-foods Today</a> |
+                <a href="#history">Our History</a>
+            </div>
+        </div>
+        <span class="hr"></span>
+        {% comment %} Vision section {% endcomment %}
+        <div class="vision" id="vision">
+            <div class="img">
+                <img src="{% static 'images/Egusi-soup.jpg' %}" alt="Food 1" width="100%">
+            </div>
+            <div class="vision-write-up">
+                <img src="{% static 'images/vision-eye.png' %}" alt="Food 1">
+                <h5>Our Vision</h5>
+                <p>
+                    We are building the most beloved and trusted dining destination for Africans.
+                </p>
+            </div>
+        </div>
+
+        {% comment %} Guarantees section {% endcomment %}
+        <div class="guarantees">
+            <div>
+                <img src="{% static 'images/hundred-points.png' %}" alt="" width="60">
+                <p>Enjoy 100% <br>
+                    <span style="color: #f49719; ">Delicious</span> Meals <br>
+                    from Local & <br>
+                    International Chefs</p>
+            </div>
+            <div>
+                <img src="{% static 'images/pricetag.png' %}" alt=""  width="60">
+                <p>Buy Anything You <br>
+                    want online at <br>
+                    the Best Flavors</p>
+            </div>
+            <div>
+                <img src="{% static 'images/food-bowl.png' %}" alt=""  width="60">
+                <p>Search, Order on <br>
+                    all Menus, <br>
+                    Pay on Delivery</p>
+            </div>
+            <div>
+                <img src="{% static 'images/customer-care.png' %}" alt="" width="60" style="max-width: 50%">
+                <p>Assisting Our Customers <br>
+                for the best <br>
+                Shopping Experience</p>
+            </div>
+        </div>
+        {% comment %} R-foods History {% endcomment %}
+        <div class="history" id="today">
+            <div>
+                <img src="{% static 'images/hourglass.png' %}" alt="" width="60">
+                <p class="sub-title1">R-Foods Today</p>
+                <div class="today1-bg">
+					<p class="tod1"> Launches With <br> 500 Dishes.</p> 
+					<p class="tod2">13<br>African<br>Countries</p>
+					<p class="tod3">Works With <br> Over 100<br>International<br>&amp; National<br>Hotels</p>
+					<p class="tod4">Becomes <span style="color:orange">#1</span> Food Website,<br>Nigeria</p><br class="clear">
+				</div>
+                <br class="clear">
+                <br>
+                <div class="today2-bg">
+					<p class="dot1">Hosts 10<br>Commercial Events</p>
+					<p class="dot2">Reaches Over 10,000<br>Active Customers.</p>
+					<p class="dot3">Introduces Over 3,000<br> New Recipes.</p>
+					<p class="dot4">Expands To 20 <br>Nigerian Cities.</p><br class="clear">
+				</div>
+                <br class="clear">
+                <br>
+            </div>
+        </div>
+        <br>
+        <div class="history" id="history">
+            <div>
+                <img src="{% static 'images/time.png' %}" alt="" width="60">
+                <p class="sub-title1">History</p>
+                <div class="today1-bg">
+                    <ul>
+                        <li>
+                            <p class="tod1">2010: R-Foods opens its doors in Lagos, Nigeria, offering a unique dining experience that blends traditional Nigerian cuisine with international flavors.</p>
+                        </li>
+                        <li>
+                            <p class="tod2">2012: R-Foods introduces its signature dish, the "Blissful Jollof", which becomes an instant hit with customers.</p>
+                        </li>
+                        <li>
+                            <p class="tod3">2014: The restaurant launches its catering service, providing delicious meals for events and parties across the city.
+                        </li>
+                    </ul>
+                    <br class="clear">
+				</div>
+                <br class="clear">
+                <br>
+                <div class="today2-bg">
+                    <ul>
+                        <li>
+                            <p class="dot1">2015: R-Foods wins the "Best Restaurant in Lagos" award at the Nigerian Food Awards.</p>
+                        </li>
+                        <li>
+                            <p class="dot2">2016: The restaurant expands its menu to include vegan and gluten-free options, catering to the growing demand for healthy eating.</p>
+                        </li>
+                        <li>
+                            <p class="dot3">2017: R-Foods celebrates its 7th anniversary with a grand reopening, unveiling a newly renovated dining area and a new menu featuring contemporary Nigerian cuisine.
+                        </li>
+                    </ul><br class="clear">
+				</div>
+                <br class="clear">
+                <br>
+            </div>
+        </div>
+    </section>
+
+    
+    <style>
+        .about-container h1{
+            text-align: center;
+            color: orange;
+            margin-top: 30px;
+        }
+        .about-links{
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            text-align: center;
+        }
+        .about-links a{
+            color: orange;
+            text-decoration: none;
+        }
+        .hr{
+            background: #f49719; 
+            width: 100%; 
+            height: 4px;
+            display: block;
+        }
+        .vision{
+            display: flex;
+            align-items: center;
+            background: #f49719; 
+            margin-top: 10px;
+        }
+        .vision img {
+            padding: 5px;
+        }
+        .vision-write-up{
+            width: 70%;
+            border: 3px solid #fff;
+            border-radius: 20px;
+            text-align: center;
+        }
+        .vision-write-up img{
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .guarantees{
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            text-align: center;
+            margin-top: 30px;
+        }
+        .history{
+            padding: 0 30px;
+        }
+        .history div{
+            height: auto;
+            background: grey;
+            padding: 20px 30px;
+            box-shadow: 5px 5px 15px 10px;
+            border-radius: 30px;
+            -webkit-box-shadow: 0px 1px 17px 0px rgba(224, 224, 224, 1);
+            -moz-box-shadow: 0px 1px 17px 0px rgba(224, 224, 224, 1);
+            box-shadow: 0px 1px 17px 1px rgba(224, 224, 224, 1);
+        }
+        .history img{
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            background-color: #fff;
+            border: 2px solid orange;
+            border-radius: 100%
+        }
+        .sub-title1 {
+            font-size: 18px;
+            line-height: 22px;
+            text-align: center;
+            font-weight: 400;
+            color: #f90;
+        }
+        .txt1 {
+            text-align: left;
+            font-size: 12px;
+            line-height: 20px;
+            font-weight: 400;
+            padding: 0 30px;
+        }
+        .today1-bg {
+            color: #fff;
+            text-align: center;
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            font-weight: bolder;
+        }
+        .today2-bg {
+            color: #fff;
+            text-align: center;
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            font-weight: bolder;
+        }
+        .clear {
+            clear: both;
+        }
+         /* Add media queries for responsiveness */
+
+    /* Mobile devices (portrait and landscape) */
+    @media only screen and (max-width: 767px) {
+        .img{
+            display: none;
+        }
+        .vision {
+            flex-direction: row;
+            align-items: center;
+        }
+        .guarantees {
+            flex-direction: column;
+            align-items: center;
+        }
+        .history {
+            padding: 0 15px;
+        }
+        .vision-write-up {
+            margin: 0 auto;
+            width: 300px
+        }
+        .today1-bg{
+            flex-direction: column;
+        }
+        .today2-bg{
+            flex-direction: column;
+        }
+    }
+
+    /* Tablets (portrait and landscape) */
+    @media only screen and (min-width: 768px) and (max-width: 1023px) {
+        .vision {
+            flex-direction: row;
+            align-items: center;
+        }
+        .vision-write-up {
+            margin: 0 auto;
+            width: 300px
+        }
+        .guarantees {
+            flex-direction: row;
+            align-items: center;
+        }
+        .history {
+            padding: 0 30px;
+        }
+        .img{
+            display: none;
+        }
+        .today1-bg{
+            flex-direction: column;
+        }
+        .today2-bg{
+            flex-direction: column;
+        }
+    }
+
+    /* Desktops (large screens) */
+    @media only screen and (min-width: 1024px) {
+        .about-container {
+            flex-direction: row;
+            align-items: center;
+        }
+        .vision {
+            flex-direction: row;
+            align-items: center;
+        }
+        .guarantees {
+            flex-direction: row;
+            align-items: center;
+        }
+        .history {
+            padding: 0 60px;
+        }
+    } 
+    </style>
+{% endblock  %}

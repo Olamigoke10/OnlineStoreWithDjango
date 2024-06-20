@@ -1,22 +1,27 @@
-from django.http import Http404
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Item, MEAL_TYPE, Cart, CartItem, Profile, Order, OrderItem
-from .forms import SignUpForm, LoginForm, ProfileUpdateForm, UserUpdateForm, ReviewForm, ContactForm, ForgotPasswordForm, SetPasswordForm
+from .models import Item, MEAL_TYPE, Cart, CartItem, Profile, Order, OrderItem, ORDER_STATUS, Video, Review, Book
+from .forms import SignUpForm, LoginForm, ProfileUpdateForm, UserUpdateForm, ReviewForm, ContactForm, OrderFilterForm , VideoForm, FeedbackForm, MenuCardForm, BookForm
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
-from django.core.mail import send_mail, BadHeaderError
-from django.template.loader import render_to_string
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.utils.encoding import force_bytes, force_str
-from django.contrib.auth.tokens import default_token_generator
 from functools import wraps
-from datetime import datetime, timedelta
+from django.http import JsonResponse
+from datetime import datetime, timedelta, date
 from django.utils import timezone
-from django.http import JsonResponse, HttpResponse
+from django.contrib.auth.decorators import user_passes_test
+from django.core.mail import send_mail
 from django.conf import settings
+from django.http import HttpResponse
+from django.contrib import messages
+from django.contrib.auth.views import PasswordResetView
+
+
+
+
+def is_admin(user):
+    return user.is_authenticated and user.is_staff
 
 
 def user_not_registered_redirect(view_func):
@@ -32,7 +37,6 @@ def menu_list(request):
     meals = MEAL_TYPE
     items = Item.objects.order_by('-date_created')
     return render(request, 'base/home.html', {'meals': meals, 'object_list': items})
-
 
 def menu_item_detail(request, pk):
     item = get_object_or_404(Item, pk=pk)
@@ -60,135 +64,84 @@ def register(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save()
             username = form.cleaned_data.get('username')
             first_name = form.cleaned_data.get('first_name')
             last_name = form.cleaned_data.get('last_name')
             raw_password = form.cleaned_data.get('password1')
-            user = authenticate(first_name=first_name, last_name=last_name,
-                                username=username, password=raw_password)
+            user = authenticate(username=username, password=raw_password)
             login(request, user)
-            return redirect('home')
+
+            # Send email to the user
+            subject = 'Welcome to Our Site'
+            message = f'Hi {first_name} {last_name}, thank you for registering on our site.'
+            from_email = settings.EMAIL_HOST_USER  # Use your own email settings from settings.py
+            to_email = [user.email]  # Assuming user.email is where you store the user's email
+
+            try:
+                send_mail(subject, message, from_email, to_email, fail_silently=False)
+                messages.success(request, 'Registration successful. Welcome to our site!')
+            except Exception as e:
+                messages.warning(request, f'Failed to send registration email. Error: {e}')
+
+            return redirect('home')  # Redirect to home after successful registration
     else:
         form = SignUpForm()
-    return render(request, 'base/signup.html', {'form': form})
 
+    return render(request, 'base/signup.html', {'form': form})
 
 def loginPage(request):
     page = 'login'
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-
+        
+        
         user = authenticate(request, username=username, password=password)
-
+            
         if user is not None:
             login(request, user)
             messages.success(request, "Login successful")
-
+            
             try:
                 profile = user.profile
             except Profile.DoesNotExist:
                 profile = Profile.objects.create(user=user)
-
+            
             return redirect('home')
         else:
             messages.error(request, "Username does not exist")
-
-    return render(request, 'base/signup.html', {'page': page})
-
+        
+    return render(request, 'base/signup.html', {'page':page})
 
 def logoutUser(request):
     logout(request)
     return redirect('home')
 
-
-def forgot_password(request):
-    if request.method == "POST":
-        forgot_password_form = ForgotPasswordForm(request.POST)
-        if forgot_password_form.is_valid():
-            data = forgot_password_form.cleaned_data['email']
-            associated_users = User.objects.filter(email=data)
-            if associated_users.exists():
-                for user in associated_users:
-                    subject = "Password Reset Requested"
-                    email_template_name = "base/forgot_password_email.html"
-                    c = {
-                        "email": user.email,
-                        'domain': request.get_host(),
-                        'site_name': 'Feane',
-                        "uid": urlsafe_base64_encode(force_bytes(user.pk)),
-                        "user": user,
-                        'token': default_token_generator.make_token(user),
-                        'protocol': 'http',
-                    }
-                    email_content = render_to_string(email_template_name, c)
-                    try:
-                        send_mail(subject, email_content, settings.DEFAULT_FROM_EMAIL, [
-                                  user.email], fail_silently=False)
-                    except BadHeaderError:
-                        return HttpResponse('Invalid header found.')
-                    return redirect("send_reset_email")
-    forgot_password_form = ForgotPasswordForm()
-    return render(request, "base/forgot_password.html", {"forgot_password_form": forgot_password_form})
-
-
-def send_reset_email(request):
-    return render(request, "base/reset_email_sent.html")
-
-
-def confirm_reset_password(request, uidb64=None, token=None):
-    try:
-        uid = force_str(urlsafe_base64_decode(uidb64))
-        user = User.objects.get(pk=uid)
-    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
-        user = None
-
-    if user is not None and default_token_generator.check_token(user, token):
-        validlink = True
-        if request.method == "POST":
-            form = SetPasswordForm(user, request.POST)
-            if form.is_valid():
-                form.save()
-                return redirect("reset_password_completed")
-        else:
-            form = SetPasswordForm(user)
-    else:
-        validlink = False
-        form = None
-    context = {
-        'form': form,
-        'validlink': validlink,
-    }
-    return render(request, "base/confirm_reset_password.html", context)
-
-
-def reset_password_completed(request):
-    return render(request, "base/reset_password_completed.html")
-
-
 def contactUs(request):
     return render(request, 'base/contact.html')
+
+def aboutUs(request):
+    return render(request, 'base/about.html')
 
 
 @user_not_registered_redirect
 @login_required
 def add_cart(request, item_id):
     item = get_object_or_404(Item, id=item_id)
-
+    
     # Get or create the cart
-    cart, created = Cart.objects.get_or_create(
-        user=request.user, is_active=True)
-
+    cart, created = Cart.objects.get_or_create(user=request.user, is_active=True)
+    
     # Check if item is already in cart
-    cart_item, created = CartItem.objects.get_or_create(cart=cart, item=item)
-
+    cart_item,created = CartItem.objects.get_or_create(cart=cart, item=item)
+    
     if not created:
         # Item is already in the cart, so we update the quantity
         cart_item.quantity += 1
         cart_item.save()
-
-    return redirect('view_cart')
+        
+    return redirect('home')
 
 
 @user_not_registered_redirect
@@ -196,15 +149,15 @@ def add_cart(request, item_id):
 def view_cart(request):
     cart = Cart.objects.filter(user=request.user, is_active=True).first()
     cart_items = CartItem.objects.filter(cart=cart)
-
-    total_price = sum(item.get_total_price() for item in cart_items)
-
+    
+    total_price = sum(item.get_total_price() for item in cart_items)  
+    
     context = {
         'cart': cart,
-        'cart_items': cart_items,
-        'total_price': total_price
-    }
-
+        'cart_items':cart_items,
+        'total_price':total_price
+    }  
+    
     return render(request, 'base/cart.html', context)
 
 
@@ -222,10 +175,10 @@ def update_cart_item(request, item_id):
             cart_item.save()
         else:
             cart_item.delete()
-
+        
         # Calculate the updated total price for the item and the entire cart
         item_total = cart_item.get_total_price() if quantity > 0 else 0
-        total_price = cart.get_total_price()  # Assuming you have this method
+        total_price = cart.get_total_price() 
 
         return JsonResponse({
             'item_total': item_total,
@@ -234,6 +187,9 @@ def update_cart_item(request, item_id):
 
     return JsonResponse({'error': 'Invalid request'}, status=400)
 
+
+
+from django.http import Http404
 
 def get_user_cart(user):
     try:
@@ -247,15 +203,16 @@ def get_user_cart(user):
 @login_required
 def remove_from_cart(request, item_id):
     item = get_object_or_404(Item, id=item_id)
-    # Use the new function to get user's cart
-    cart = get_user_cart(request.user)
+    cart = get_user_cart(request.user)  
 
     try:
         cart_item = CartItem.objects.get(cart=cart, item=item)
     except CartItem.DoesNotExist:
         raise Http404("Cart item not found")
     except CartItem.MultipleObjectsReturned:
-        # Delete all instances found for this item in the cart
+        # Handle the case where multiple CartItems are found (should not happen ideally)
+        # Log an error or choose which one to delete
+        # For simplicity, you can delete all instances found
         CartItem.objects.filter(cart=cart, item=item).delete()
         return redirect('view_cart')
 
@@ -264,15 +221,16 @@ def remove_from_cart(request, item_id):
     return redirect('view_cart')
 
 
+
 # User_profile
 @login_required
 def profile(request):
     user_profile, created = Profile.objects.get_or_create(user=request.user)
-
+    
     if request.method == 'POST':
         u_form = UserUpdateForm(request.POST, instance=request.user)
         p_form = ProfileUpdateForm(request.POST, instance=request.user.profile)
-
+        
         if u_form.is_valid() and p_form.is_valid():
             u_form.save()
             p_form.save()
@@ -280,13 +238,13 @@ def profile(request):
     else:
         u_form = UserUpdateForm(instance=request.user)
         p_form = ProfileUpdateForm(instance=request.user.profile)
-
+            
     context = {
         'user': request.user,
         'u_form': u_form,
         'p_form': p_form
     }
-
+        
     return render(request, 'base/profile.html', context)
 
 
@@ -296,12 +254,12 @@ def profile_update(request):
         form = ProfileUpdateForm(request.POST, instance=request.user.profile)
         if form.is_valid():
             form.save()
-            # Redirect to profile page after successful update
-            return redirect('profile')
+            return redirect('profile')  # Redirect to profile page after successful update
     else:
         form = ProfileUpdateForm(instance=request.user.profile)
-
+    
     return render(request, 'base/profile_update.html', {'form': form})
+
 
 
 @login_required
@@ -317,8 +275,9 @@ def add_review(request, item_id):
             return redirect('menu_item_detail', pk=item_id)
     else:
         form = ReviewForm()
+    
+    return render(request, 'base/add_review.html', {'form':form, 'item':item})    
 
-    return render(request, 'base/add_review.html', {'form': form, 'item': item})
 
 
 def place_order(request):
@@ -327,18 +286,16 @@ def place_order(request):
         cart = get_object_or_404(Cart, user=user, is_active=True)
         if not cart.cartitem_set.exists():
             return JsonResponse({'error': 'Cart is empty'}, status=400)
-        
-        estimated_delivery = datetime.now() + timedelta(hours=1) 
 
-        # Calculate total price
-        total_price = cart.get_total_price()
+        # Calculate estimated delivery time
+        estimated_delivery = datetime.now() + timedelta(minutes=30)  # Assuming 30 minutes delivery time
 
-        # Create the order
+        # Create order
         order = Order.objects.create(
             user=user, 
-            total_price=total_price,
-            status='Pending',  # Initial status
-            estimated_delivery= estimated_delivery  
+            total_price=cart.get_total_price(),
+            status='Pending',  # Initial status set to Pending
+            estimated_delivery=estimated_delivery
         )
 
         # Add items to order
@@ -358,7 +315,12 @@ def place_order(request):
         # Create a new empty cart for the user
         Cart.objects.create(user=user, is_active=True)
 
-        return JsonResponse({'success': 'Order placed successfully', 'order_id': order.id})
+        return JsonResponse({
+            'success': 'Order placed successfully',
+            'order_id': order.id,
+            'estimated_delivery': order.estimated_delivery.strftime('%Y-%m-%d %H:%M:%S')  # Formatting for JSON response
+        })
+
     
     
 @login_required
@@ -395,4 +357,179 @@ def contact_view(request):
         form = ContactForm()
 
     return render(request, 'contact', {'form': form})
+
+
+@login_required
+def feedback_view(request):
+    if request.method == 'POST':
+        form = FeedbackForm(request.POST)
+        if form.is_valid():
+            # Get the form data
+            first_name = form.cleaned_data['first_name']
+            last_name = form.cleaned_data['last_name']
+            email = form.cleaned_data['email']
+            subject = form.cleaned_data['subject']
+
+            # Send feedback response email
+            send_mail(
+                'Thank you for your feedback',
+                'Dear {},\n\nThank you for your feedback! We appreciate you taking the time to reach out to us.\n\nBest Regards,\nR-Foods Team'.format(first_name),
+                settings.EMAIL_HOST_USER,  # This is the sender email
+                [email],  # This is the recipient email
+                fail_silently=False,
+            )
+
+            return redirect('feedback_thanks')  # Redirect to a thank you page
+    else:
+        form = FeedbackForm()
     
+    return render(request, 'base/contact.html', {'form': form})
+
+
+def item_detail(request, item_id):
+    item = get_object_or_404(Item, id=item_id)
+    reviews = Review.objects.filter(item=item)
+    return render(request, 'item_detail.html', {
+        'object': item,
+        'reviews': reviews,
+        'user': request.user,
+    })
+
+
+@login_required
+def submit_review(request, item_id):
+    item = get_object_or_404(Item, id=item_id)
+    
+    
+    if request.method == 'POST':
+        rating = request.POST.get('rating')
+        comment = request.POST.get('comment')
+        
+        if not rating or not comment:
+            messages.error(request, "All fields are required.")
+            return redirect('item_detail', item_id=item_id)
+        
+        try:
+            rating = int(rating)
+            if rating < 1 or rating > 5:
+                messages.error(request, "Invalid rating value. Rating must be between 1 and 5.")
+                return redirect('item_detail', item_id=item_id)
+        except ValueError:
+            messages.error(request, "Rating must be a number.")
+            return redirect('item_detail', item_id=item_id)
+        
+        Review.objects.create(
+            item=item,
+            user=request.user,
+            rating=rating,
+            comment=comment
+        )
+        messages.success(request, "Review submitted successfully.")
+        return redirect('item_detail', item_id=item_id)
+    
+    messages.error(request, "Invalid request method.")
+    return redirect('item_detail', item_id=item_id)
+
+
+
+
+class CustomPasswordResetView(PasswordResetView):
+    template_name = 'registration/password_reset_form.html'  # customize as needed
+    email_template_name = 'registration/password_reset_email.html'  # customize as needed
+    success_url = '/password-reset/done/' 
+
+
+# Resturant Owners
+
+
+@login_required
+@user_passes_test(is_admin)
+def orders_view(request):
+    # Fetch all orders for today
+    today = timezone.now().date()
+    orders = Order.objects.filter(created_at__date=today)
+    
+    # Handle status filter if provided
+    status_filter = request.GET.get('status')
+    if status_filter:
+        orders = orders.filter(status=status_filter)
+    
+    # Update order statuses based on time criteria (every 60 seconds)
+    for order in orders:
+        if order.status == 'Pending' and timezone.now() - order.created_at >= timezone.timedelta(seconds=60):
+            order.status = 'Confirmed'
+            order.save()
+        elif order.status == 'Confirmed' and timezone.now() - order.created_at >= timezone.timedelta(seconds=120):
+            order.status = 'Delivered'
+            order.save()
+    
+    # Prepare context for rendering template
+    context = {
+        'orders': orders,
+        'status_choices': ORDER_STATUS,
+        'selected_status': status_filter
+    }
+    
+    return render(request, 'base/order_list.html', context)
+    
+    
+@user_passes_test(is_admin)
+def video_list(request):
+    videos = Video.objects.all()
+    return render(request, 'base/video_list.html', {'videos': videos})
+
+def add_video(request):
+    if request.method == 'POST':
+        form = VideoForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('video_list')  # Redirect to video list page
+    else:
+        form = VideoForm()
+    return render(request, 'base/add_video.html', {'form': form})
+
+def edit_video(request, video_id):
+    video = get_object_or_404(Video, pk=video_id)
+    if request.method == 'POST':
+        form = VideoForm(request.POST, request.FILES, instance=video)
+        if form.is_valid():
+            form.save()
+            return redirect('video_list')  # Redirect to video list page
+    else:
+        form = VideoForm(instance=video)
+    return render(request, 'base/edit_video.html', {'form': form, 'video': video})
+
+
+@login_required
+@user_passes_test(is_admin)
+def upload_menu_card(request):
+    if request.method == 'POST':
+        form = MenuCardForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('upload_success')  # Redirect to a success page
+    else:
+        form = MenuCardForm()
+    return render(request, 'base/upload_menu_card.html', {'form': form})
+
+def upload_success(request):
+    return render(request, 'base/upload_success.html')
+
+@user_passes_test(is_admin)
+def upload_book(request):
+    if request.method == 'POST':
+        form = BookForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('book_list')
+    else:
+        form = BookForm()
+    return render(request, 'base/upload_book.html', {'form': form})
+
+def book_list(request):
+    books = Book.objects.all()
+    return render(request, 'base/book_list.html', {'books': books})
+
+def read_book(request, pk):
+    book = get_object_or_404(Book, pk=pk)
+    return render(request, 'base/read_book.html', {'book': book})

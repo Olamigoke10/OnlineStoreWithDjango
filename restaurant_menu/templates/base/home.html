@@ -1,36 +1,131 @@
 {% extends 'main.html' %}
+{% load static %}
 
 {% block content %}
-<main class="layout layout--3">
+<main class="menu-layout">
   <div class="container">
     <h1>Restaurant Menu</h1>
-    <ul class="list-group list-group-flush">
+
+    <!-- Button Group for Meal Categories -->
+    <div class="btn-group" role="group" aria-label="Meal Categories">
+      <button class="btn btn-outline-primary" onclick="showAllMeals()">Show All</button>
       {% for meal in meals %}
-        <h2 class="pt-5">{{ meal.1 }}</h2>
-        {% for row in object_list %}
-          {% if row.meal_type == meal.0 %}
-            <li class="list-group-item d-flex justify-content-between align-items-center border-0 pb-0">
-              <a href="{% url 'menu_item_detail' row.pk %}">
-                {% if row.status == 0 %}
-                  <b><del>{{ row.meal }}</del></b>
-                {% else %}
-                  <b>{{ row.meal }}</b>
-                {% endif %}
-              </a>
-              {% if row.image %}
-                <img src="{{ row.image.url }}" alt="{{ row.meal }}" style="width: 100px; height: auto;">
-              {% endif %}
-              <span class="badge bg-primary rounded-pill">{{ row.price }}</span>
-              <span><a href="{% url 'add_to_cart' row.pk %}">Add</a></span>
-            </li>
-            <li class="list-group-item pt-0">
-              <p>{{ row.description }}</p>
-            </li>
-          {% endif %}
-        {% endfor %}
+        <button class="btn btn-outline-secondary" onclick="showMeals('{{ meal.0 }}')">{{ meal.1 }}</button>
       {% endfor %}
-    </ul>
+    </div>
+
+    <!-- Meal Sections -->
+    <div class="mt-3">
+      {% for meal in meals %}
+        <div class="meal-section" data-meal-type="{{ meal.0 }}" style="display: none;">
+          <h2 class="pt-5">{{ meal.1 }}</h2>
+          <ul class="list-group list-group-flush">
+            {% for row in object_list %}
+              {% if row.meal_type == meal.0 %}
+                <li class="list-group-item d-flex justify-content-between align-items-center border-0 pb-0">
+                  <a href="{% url 'menu_item_detail' row.pk %}">
+                    {% if row.status == 0 %}
+                      <b><del>{{ row.meal }}</del></b>
+                    {% else %}
+                      <b>{{ row.meal }}</b>
+                    {% endif %}
+                  </a>
+                  {% if row.image %}
+                    <img src="{{ row.image.url }}" alt="{{ row.meal }}" style="width: 100px; height: auto;">
+                  {% endif %}
+                  <span class="badge bg-primary rounded-pill">{{ row.price }}</span>
+                  <span><a href="{% url 'add_to_cart' row.pk %}">Add</a></span>
+                </li>
+                <li class="list-group-item pt-0">
+                  <p>{{ row.description }}</p>
+                </li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+        </div>
+      {% endfor %}
+    </div>
+
     <a href="{% url 'view_cart' %}">Cart</a>
+
+    {% if user.is_authenticated and user.is_staff %}
+      <a href="{% url 'order_view' %}">Orders</a>
+      <a href="{% url 'video_list' %}">Video</a>
+      <a href="{% url 'upload_menu_card' %}">Upload</a>
+      <a href="{% url 'upload_book' %}">Upload Books</a>
+    {% endif %}
   </div>
+  <div class="mini-about">
+    <div class="imgd">
+      <img src="{% static 'images/3D_Sandwitch.png'%}" alt="" width="450">
+    </div>
+    <div class="about-text">
+      <h3>We Are R-Foods</h3>
+      <p>Welcome to R-foods, where we blend the warmth of traditional recipes <br> with a twist of modern culinary innovation. Our cozy restaurant is the perfect <br> spot for food lovers seeking to indulge in a diverse menu that pays homage to classic flavors <br> while embracing contemporary tastes. <br>
+      At R-foods,...</p>
+      <button class="btn-box">
+        <a href="" class="btn1">Read More</a>
+      </button>
+    </div>
+  </div>
+  <section id="reviews" class="body">
+    <div class="reviews">
+        <h3>What Says Our Customers From All Over </h3>
+        <div class="reviews-img f-review" style="margin-top: 30px;">
+            <img src="{% static 'images/client1.jpg'%}" alt="" width="150" style="border-radius: 50%; border: 2px solid #0000ff;">
+            <h3>Elizabeth John</h3>
+            <p>United Kingdom</p>
+            <q>
+              R-Foods never disappoints! The ambiance is cozy and inviting, perfect for a date night or a family dinner. I tried the grilled salmon with the chef’s special sauce, and it was divine. The flavors were balanced perfectly, and the presentation was top-notch. Can’t wait to come back and try more dishes! <br>
+                Rating: ⭐⭐⭐⭐⭐
+            </q>
+        </div>
+        <div class="reviews-img s-review" style="margin-top: 30px;">
+            <img src="{% static 'images/client2.jpg'%}" alt="" width="150" style="border-radius: 50%; border: 2px solid #0000ff;">
+            <h3>Steven Adebayo</h3>
+            <p>Nigeria</p>
+            <q>
+              If you’re looking for a culinary adventure, R-Foods is the place to be. Their fusion cuisine is both innovative and delicious. I was particularly impressed with the spicy mango chicken & assorted jollof rice – it had just the right kick to it. The staff was friendly and attentive, making the whole dining experience delightful. <br>
+              Rating: ⭐⭐⭐⭐⭐
+            </q>
+        </div>
+        <div class="reviews-img t-review" style="margin-top: 30px;">
+            <img src="{% static 'images/client3.jpg'%}" alt="" width="150" style="border-radius: 50%; border: 2px solid #0000ff;">
+            <h3>Alia Chopra</h3>
+            <p>India</p>
+            <q>
+              I visited R-Foods on a friend’s recommendation and it exceeded my expectations. The menu offers a great variety of options, catering to all tastes. I opted for the vegetarian lasagna, and it was the best I’ve ever had – rich, flavorful, and satisfying. The dessert menu is also worth exploring; the chocolate lava cake was heavenly!<br>
+                Rating: ⭐⭐⭐⭐⭐
+            </q>
+        </div>
+    </div>
+</section>
 </main>
+
+<script>
+  // Function to show all meals
+  function showAllMeals() {
+    var mealSections = document.getElementsByClassName("meal-section");
+    for (var i = 0; i < mealSections.length; i++) {
+      mealSections[i].style.display = "block";
+    }
+  }
+
+  // Function to show specific meal category
+  function showMeals(mealType) {
+    var mealSections = document.getElementsByClassName("meal-section");
+    for (var i = 0; i < mealSections.length; i++) {
+      if (mealSections[i].getAttribute("data-meal-type") === mealType) {
+        mealSections[i].style.display = "block";
+      } else {
+        mealSections[i].style.display = "none";
+      }
+    }
+  }
+
+  // Initially show all meals
+  document.addEventListener("DOMContentLoaded", function() {
+    showAllMeals();
+  });
+</script>
 {% endblock %}

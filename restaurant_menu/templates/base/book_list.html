@@ -1,0 +1,14 @@
+{% extends 'new_main.html' %}
+
+{% block content %}
+<h2>Available Books</h2>
+<ul>
+    {% for book in books %}
+    <li>
+        <h3>{{ book.title }} by {{ book.author }}</h3>
+        <p>{{ book.description }}</p>
+        <a href="{% url 'read_book' book.pk %}">Read</a>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}
