@@ -1,13 +1,72 @@
-
 {% extends 'new_main.html' %}
+
+{% load crispy_forms_tags %}
+
+<style>
+    /* Custom styles */
+    .custom-form {
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #f7f7f7;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .custom-form input, .custom-form textarea, .custom-form select {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+
+    .custom-form button {
+        width: 100%;
+        padding: 10px;
+        background-color: red;
+        border: none;
+        border-radius: 5px;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .custom-form button:hover {
+        background-color: #0056b3;
+    }
+
+    .reviews .review {
+        border-bottom: 1px solid #ddd;
+        margin-bottom: 15px;
+        padding-bottom: 15px;
+    }
+
+    .reviews .review:last-child {
+        border-bottom: none;
+    }
+
+    .reviews .review p {
+        margin: 5px 0;
+    }
+
+    .reviews .text-muted {
+        font-size: 0.9em;
+        color: #888;
+    }
+</style>
+
 {% block content %}
-<h2> {{ item.meal }} </h2>
-<p> {{ item.description }} </p>
-<p> {{ item.price }} </p>
-    <h1>{{ object.meal }}</h1>
-    <img src="{{ object.image.url }}" alt="{{ object.meal }}" class="img-fluid">
-    <p>{{ object.description }}</p>
-    <p><strong>Price:</strong> ${{ object.price }}</p>
+<div class="container">
+    <h2> {{ item.meal }} </h2>
+    <p> {{ item.description }} </p>
+    <p> {{ item.price }} </p>
+        <h1>{{ object.meal }}</h1>
+        <img src="{{ object.image.url }}" alt="{{ object.meal }}" class="img-fluid">
+        <p>{{ object.description }}</p>
+        <p><strong>Price:</strong> ${{ object.price }}</p>
 
     <h2>Reviews</h2>
     <div class="reviews">
@@ -25,12 +84,32 @@
 
     {% if user.is_authenticated %}
         <h3>Leave a Review</h3>
-        <form method="POST">
+        <form method="POST" class="custom-form needs-validation" novalidate>
             {% csrf_token %}
-            {{ review_form.as_p }}
+            {{ review_form|crispy }}
             <button type="submit" class="btn btn-primary">Submit Review</button>
         </form>
     {% else %}
         <p>You must be <a href="{% url 'login' %}">logged in</a> to leave a review.</p>
     {% endif %}
+</div>
+
+<script>
+    // Bootstrap validation
+    (function () {
+        'use strict'
+        var forms = document.querySelectorAll('.needs-validation')
+        Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+                    form.classList.add('was-validated')
+                }, false)
+            })
+    })()
+</script>
+
 {% endblock %}
