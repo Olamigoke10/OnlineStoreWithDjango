@@ -1,0 +1,23 @@
+{% extends 'new_main.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Search Results for "{{ query }}"</h2>
+    {% if search_results %}
+        <ul>
+            {% for item in search_results %}
+                <li>
+                    <h3>{{ item.meal }}</h3>
+                    <p>{{ item.description }}</p>
+                    <p><strong>Price:</strong> ${{ item.price }}</p>
+                    {% if item.image %}
+                        <img src="{{ item.image.url }}" alt="{{ item.meal }}" class="img-fluid">
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No items found matching your search criteria.</p>
+    {% endif %}
+</div>
+{% endblock %}

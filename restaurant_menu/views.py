@@ -437,10 +437,15 @@ class CustomPasswordResetView(PasswordResetView):
     template_name = 'registration/password_reset_form.html'  # customize as needed
     email_template_name = 'registration/password_reset_email.html'  # customize as needed
     success_url = '/password-reset/done/' 
+    
+    
+def search(request):
+    query = request.GET.get('query', '')
+    search_results = Item.objects.filter(meal__icontains=query) if query else []
+    return render(request, 'base/search_result.html', {'search_results': search_results, 'query': query})
 
 
 # Resturant Owners
-
 
 @login_required
 @user_passes_test(is_admin)

@@ -4,7 +4,7 @@
 <header class="header_section" style="background-color: black;">
     <div class="container">
         <nav class="navbar navbar-expand-lg custom_nav-container">
-            <a class="navbar-brand" href="index.html">
+            <a class="navbar-brand" href="{% url 'home' %}">
                 <span>Feane</span>
             </a>
 
@@ -15,13 +15,13 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mx-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href="index.html">Home</a>
+                        <a class="nav-link" href="{% url 'home' %}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="menu.html">Menu</a>
+                        <a class="nav-link" href="">Menu</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="about.html">About</a>
+                        <a class="nav-link" href="{% url 'about' %}">About</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'contact' %}">Contact Us</a>
@@ -36,18 +36,12 @@
                             <!-- Cart Icon SVG here -->
                         </a>
                         <a href="{% url 'logout' %}" class="order_online">Logout</a>
-                        
                     {% else %}
-                        <a href="">
-                            <img src="{% static 'images/Avatar.png' %}" alt="Avatar image" width="25">
-                        </a>
-                        <a href="">
-                            <img src="{% static 'images/Cart.png' %}" alt="Cart image" width="25">
-                        </a>
                         <a href="{% url 'login' %}" class="order_online">Login</a>
                         <a href="{% url 'register' %}" class="order_online">Sign Up</a>
                     {% endif %}
-                    <form class="form-inline">
+                    <form class="form-inline" action="{% url 'search' %}" method="GET">
+                        <input class="form-control mr-sm-2" type="search" placeholder="Search for dishes" name="query" aria-label="Search">
                         <button class="btn my-2 my-sm-0 nav_search-btn" type="submit">
                             <i class="fa fa-search" aria-hidden="true"></i>
                         </button>
