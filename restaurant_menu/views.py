@@ -385,11 +385,20 @@ def feedback_view(request):
     return render(request, 'base/contact.html', {'form': form})
 
 
+def item_detail(request, item_id):
+    item = get_object_or_404(Item, id=item_id)
+    reviews = Review.objects.filter(item=item)
+    return render(request, 'item_detail.html', {
+        'object': item,
+        'reviews': reviews,
+        'user': request.user,
+    })
 
 
 @login_required
 def submit_review(request, item_id):
     item = get_object_or_404(Item, id=item_id)
+    
     
     if request.method == 'POST':
         rating = request.POST.get('rating')
