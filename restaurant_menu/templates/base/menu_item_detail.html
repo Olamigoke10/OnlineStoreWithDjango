@@ -1,9 +1,31 @@
 {% extends 'new_main.html' %}
 
-{% load crispy_forms_tags %}
-
 <style>
-    /* Custom styles */
+    .star-rating {
+        direction: ltr;
+        font-size: 24px;
+        display: flex;
+        justify-content: center;
+        margin-bottom: 10px;
+    }
+    
+    .star-rating input[type="radio"] {
+        display: none; /* This hides the radio buttons */
+    }
+    
+    .star-rating label {
+        cursor: pointer;
+        color: #ddd;
+        font-size: 30px; /* Adjust size of the stars */
+        padding: 5px;
+    }
+    
+    .star-rating input[type="radio"]:checked ~ label,
+    .star-rating label:hover,
+    .star-rating label:hover ~ label {
+        color: #f5c518; /* Color for checked or hovered stars */
+    }
+
     .custom-form {
         max-width: 600px;
         margin: 20px auto;
@@ -13,7 +35,8 @@
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
 
-    .custom-form input, .custom-form textarea, .custom-form select {
+    .custom-form input,
+    .custom-form textarea {
         width: 100%;
         padding: 10px;
         margin-bottom: 10px;
@@ -25,7 +48,7 @@
     .custom-form button {
         width: 100%;
         padding: 10px;
-        background-color: red;
+        background-color: #007bff;
         border: none;
         border-radius: 5px;
         color: white;
@@ -56,60 +79,77 @@
         font-size: 0.9em;
         color: #888;
     }
+
+    .fa-star.checked {
+        color: #f5c518;
+    }
 </style>
 
 {% block content %}
 <div class="container">
-    <h2> {{ item.meal }} </h2>
-    <p> {{ item.description }} </p>
-    <p> {{ item.price }} </p>
-        <h1>{{ object.meal }}</h1>
-        <img src="{{ object.image.url }}" alt="{{ object.meal }}" class="img-fluid">
-        <p>{{ object.description }}</p>
-        <p><strong>Price:</strong> ${{ object.price }}</p>
+    <h2>{{ item.meal }}</h2>
+    <p>{{ item.description }}</p>
+    <p>{{ item.price }}</p>
+    <h1>{{ object.meal }}</h1>
+    <img src="{{ object.image.url }}" alt="{{ object.meal }}" class="img-fluid">
+    <p>{{ object.description }}</p>
+    <p><strong>Price:</strong> ${{ object.price }}</p>
 
     <h2>Reviews</h2>
     <div class="reviews">
         {% for review in reviews %}
-            <div class="review">
-                <p><strong>{{ review.user.username }}:</strong></p>
-                <p>Rating: {{ review.rating }} / 5</p>
-                <p>{{ review.comment }}</p>
-                <p class="text-muted">{{ review.date_created }}</p>
-            </div>
+        <div class="review">
+            <p><strong>{{ review.user.username }}:</strong></p>
+            <p>
+                Rating: 
+                {% for i in range %}
+                    {% if i <= review.rating %}
+                        <span class="fa fa-star checked"></span>
+                    {% else %}
+                        <span class="fa fa-star"></span>
+                    {% endif %}
+                {% endfor %}
+            </p>
+            <p>{{ review.comment }}</p>
+            <p class="text-muted">{{ review.date_created }}</p>
+        </div>
         {% empty %}
-            <p>No reviews yet.</p>
+        <p>No reviews yet.</p>
         {% endfor %}
     </div>
 
     {% if user.is_authenticated %}
-        <h3>Leave a Review</h3>
-        <form method="POST" class="custom-form needs-validation" novalidate>
-            {% csrf_token %}
-            {{ review_form|crispy }}
-            <button type="submit" class="btn btn-primary">Submit Review</button>
-        </form>
+    <h3>Leave a Review</h3>
+    <form method="POST" class="custom-form needs-validation" novalidate>
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="rating">Rating</label>
+            <div class="star-rating">
+                <input id="star5" name="rating" type="radio" value="5" />
+                <label for="star5" title="5 stars"><i class="fas fa-star"></i></label>
+                
+                <input id="star4" name="rating" type="radio" value="4" />
+                <label for="star4" title="4 stars"><i class="fas fa-star"></i></label>
+                
+                <input id="star3" name="rating" type="radio" value="3" />
+                <label for="star3" title="3 stars"><i class="fas fa-star"></i></label>
+                
+                <input id="star2" name="rating" type="radio" value="2" />
+                <label for="star2" title="2 stars"><i class="fas fa-star"></i></label>
+                
+                <input id="star1" name="rating" type="radio" value="1" />
+                <label for="star1" title="1 star"><i class="fas fa-star"></i></label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="comment">Comment</label>
+            <textarea id="comment" name="comment" rows="4" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit Review</button>
+    </form>
+    
     {% else %}
-        <p>You must be <a href="{% url 'login' %}">logged in</a> to leave a review.</p>
+    <p>You must be <a href="{% url 'login' %}">logged in</a> to leave a review.</p>
     {% endif %}
 </div>
-
-<script>
-    // Bootstrap validation
-    (function () {
-        'use strict'
-        var forms = document.querySelectorAll('.needs-validation')
-        Array.prototype.slice.call(forms)
-            .forEach(function (form) {
-                form.addEventListener('submit', function (event) {
-                    if (!form.checkValidity()) {
-                        event.preventDefault()
-                        event.stopPropagation()
-                    }
-                    form.classList.add('was-validated')
-                }, false)
-            })
-    })()
-</script>
-
 {% endblock %}

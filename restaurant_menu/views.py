@@ -1,6 +1,6 @@
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Item, MEAL_TYPE, Cart, CartItem, Profile, Order, OrderItem, ORDER_STATUS, Video
+from .models import Item, MEAL_TYPE, Cart, CartItem, Profile, Order, OrderItem, ORDER_STATUS, Video, Review
 from .forms import SignUpForm, LoginForm, ProfileUpdateForm, UserUpdateForm, ReviewForm, ContactForm, OrderFilterForm , VideoForm, FeedbackForm
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -13,6 +13,9 @@ from django.utils import timezone
 from django.contrib.auth.decorators import user_passes_test
 from django.core.mail import send_mail
 from django.conf import settings
+from django.http import HttpResponse
+from django.contrib import messages
+
 
 
 
@@ -380,6 +383,42 @@ def feedback_view(request):
         form = FeedbackForm()
     
     return render(request, 'base/contact.html', {'form': form})
+
+
+
+
+@login_required
+def submit_review(request, item_id):
+    item = get_object_or_404(Item, id=item_id)
+    
+    if request.method == 'POST':
+        rating = request.POST.get('rating')
+        comment = request.POST.get('comment')
+        
+        if not rating or not comment:
+            messages.error(request, "All fields are required.")
+            return redirect('item_detail', item_id=item_id)
+        
+        try:
+            rating = int(rating)
+            if rating < 1 or rating > 5:
+                messages.error(request, "Invalid rating value. Rating must be between 1 and 5.")
+                return redirect('item_detail', item_id=item_id)
+        except ValueError:
+            messages.error(request, "Rating must be a number.")
+            return redirect('item_detail', item_id=item_id)
+        
+        Review.objects.create(
+            item=item,
+            user=request.user,
+            rating=rating,
+            comment=comment
+        )
+        messages.success(request, "Review submitted successfully.")
+        return redirect('item_detail', item_id=item_id)
+    
+    messages.error(request, "Invalid request method.")
+    return redirect('item_detail', item_id=item_id)
 
 
 
