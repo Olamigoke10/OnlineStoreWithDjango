@@ -34,6 +34,9 @@ urlpatterns = [
     path('videos/add/', views.add_video, name='add_video'),
     path('videos/<int:video_id>/edit/', views.edit_video, name='edit_video'),
     
+    path('item/<int:item_id>/', views.item_detail, name='item_detail'),
+    path('items/<int:item_id>/submit_review/', views.submit_review, name='submit_review'),
+    
     
     
 ]
