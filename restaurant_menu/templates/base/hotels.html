@@ -1,0 +1,18 @@
+{% extends 'new_main.html' %}
+{% load static %}
+
+<section class="hotels-container">
+    <h1>Hotels Partnered with Our Restaurant</h1>
+    <ul>
+        {% for hotel in hotels %}
+            <li>
+                <h3>{{ hotel.name }}</h3>
+                <p>{{ hotel.description }}</p>
+                <p>Location: {{ hotel.location }}</p>
+                <!-- Add other hotel details as needed -->
+            </li>
+        {% empty %}
+            <p>No hotels found.</p>
+        {% endfor %}
+    </ul>
+</section>

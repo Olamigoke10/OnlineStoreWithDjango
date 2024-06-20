@@ -1,7 +1,8 @@
 {% extends 'main.html' %}
+{% load static %}
 
 {% block content %}
-<main class="layout layout--3">
+<main class="menu-layout">
   <div class="container">
     <h1>Restaurant Menu</h1>
 
@@ -52,6 +53,51 @@
       <a href="{% url 'video_list' %}">Video</a>
     {% endif %}
   </div>
+  <div class="mini-about">
+    <div class="imgd">
+      <img src="{% static 'images/3D_Sandwitch.png'%}" alt="" width="450">
+    </div>
+    <div class="about-text">
+      <h3>We Are R-Foods</h3>
+      <p>Welcome to R-foods, where we blend the warmth of traditional recipes <br> with a twist of modern culinary innovation. Our cozy restaurant is the perfect <br> spot for food lovers seeking to indulge in a diverse menu that pays homage to classic flavors <br> while embracing contemporary tastes. <br>
+      At R-foods,...</p>
+      <button class="btn-box">
+        <a href="" class="btn1">Read More</a>
+      </button>
+    </div>
+  </div>
+  <section id="reviews" class="body">
+    <div class="reviews">
+        <h3>What Says Our Customers From All Over </h3>
+        <div class="reviews-img f-review" style="margin-top: 30px;">
+            <img src="{% static 'images/client1.jpg'%}" alt="" width="150" style="border-radius: 50%; border: 2px solid #0000ff;">
+            <h3>Elizabeth John</h3>
+            <p>United Kingdom</p>
+            <q>
+              R-Foods never disappoints! The ambiance is cozy and inviting, perfect for a date night or a family dinner. I tried the grilled salmon with the chef’s special sauce, and it was divine. The flavors were balanced perfectly, and the presentation was top-notch. Can’t wait to come back and try more dishes! <br>
+                Rating: ⭐⭐⭐⭐⭐
+            </q>
+        </div>
+        <div class="reviews-img s-review" style="margin-top: 30px;">
+            <img src="{% static 'images/client2.jpg'%}" alt="" width="150" style="border-radius: 50%; border: 2px solid #0000ff;">
+            <h3>Steven Adebayo</h3>
+            <p>Nigeria</p>
+            <q>
+              If you’re looking for a culinary adventure, R-Foods is the place to be. Their fusion cuisine is both innovative and delicious. I was particularly impressed with the spicy mango chicken & assorted jollof rice – it had just the right kick to it. The staff was friendly and attentive, making the whole dining experience delightful. <br>
+              Rating: ⭐⭐⭐⭐⭐
+            </q>
+        </div>
+        <div class="reviews-img t-review" style="margin-top: 30px;">
+            <img src="{% static 'images/client3.jpg'%}" alt="" width="150" style="border-radius: 50%; border: 2px solid #0000ff;">
+            <h3>Alia Chopra</h3>
+            <p>India</p>
+            <q>
+              I visited R-Foods on a friend’s recommendation and it exceeded my expectations. The menu offers a great variety of options, catering to all tastes. I opted for the vegetarian lasagna, and it was the best I’ve ever had – rich, flavorful, and satisfying. The dessert menu is also worth exploring; the chocolate lava cake was heavenly!<br>
+                Rating: ⭐⭐⭐⭐⭐
+            </q>
+        </div>
+    </div>
+</section>
 </main>
 
 <script>

@@ -117,6 +117,9 @@ def logoutUser(request):
 def contactUs(request):
     return render(request, 'base/contact.html')
 
+def aboutUs(request):
+    return render(request, 'base/about.html')
+
 
 @user_not_registered_redirect
 @login_required
