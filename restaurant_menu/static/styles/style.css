@@ -808,6 +808,13 @@ text-decoration: none;
   width: 7rem;
   height: 40px;
 }
+#order-history-btn{
+  width: 9rem;
+}
+#order-history-btn a{
+  text-decoration: none;
+  color: #fff;
+}
 
 /* Contact styles */
 .contact-hero{

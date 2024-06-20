@@ -1,12 +1,68 @@
 {% extends "new_main.html" %}
 {% block content %}
-<h2>Order History</h2>
+<h2 style="text-align: center; color: orange">Order History</h2>
 <ul>
     {% for order in orders %}
         <li>
-            <a href="{% url 'order_detail' order.id %}">Order {{ order.id }} - {{ order.status }}</a>
-            - {{ order.created_at }} - ${{ order.total_price }}
+            <a href="{% url 'order_detail' order.id %}" class="order-id">Order {{ order.id }}</a>
+            <div class="order-info">
+                <span class="order-status">{{ order.status }}</span>
+                <span class="order-date">{{ order.created_at }}</span>
+                <span class="order-price">$ {{ order.total_price }}</span>
+            </div>
         </li>
     {% endfor %}
 </ul>
+<style>
+  /* Styled the order history list */
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+li {
+    padding: 20px;
+    border-bottom: 1px solid #ccc;
+}
+
+li:last-child {
+    border-bottom: none;
+}
+
+  /* Styled the order links */
+a {
+    color: #337ab7;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #23527c;
+}
+
+  /* Add some visual hierarchy to the order information */
+.order-info {
+    display: flex;
+    justify-content: space-between;
+}
+
+.order-id {
+    font-weight: bold;
+    color: orange;
+}
+
+.order-status {
+    color: #999;
+}
+
+.order-date {
+    color: #999;
+    font-size: 14px;
+}
+
+.order-price {
+    font-weight: bold;
+    color: #666;
+}
+</style>
 {% endblock %}
