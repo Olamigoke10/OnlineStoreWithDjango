@@ -1032,4 +1032,37 @@ input[type=submit]:hover {
 .btn-save-changes:hover {
   background-color:#da7929;
 }
+/* Feedback */
+.content-container h2 {
+  color: #fff;
+  font-weight: bold;
+  font-size: 24px;
+  margin-bottom: 10px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.content-container p {
+  font-size: 18px;
+  color: #fff;
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.content-container {
+  background: url('../images/feedback_img.jpg');
+  background-size: cover;
+  background-color: #f2f2f2;
+  padding: 20px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  height: 500px;
+  position: relative;
+  overflow: hidden;
+}
 
