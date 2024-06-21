@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Item, Cart, CartItem, Order, OrderItem
+from .models import Item, Cart, CartItem, Order, OrderItem, Video
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 
@@ -25,8 +25,14 @@ class OrderAdmin(admin.ModelAdmin):
     inlines = [OrderItemInline]
 
 
+
+class VideoAdmin(admin.ModelAdmin):
+    model = Video
+    list_display = ('title', 'description', 'created_at', 'video_file')
+
 admin.site.register(Order, OrderAdmin)
 admin.site.unregister(User)
 admin.site.register(User, CustomUserAdmin)
 admin.site.register(Cart)
 admin.site.register(CartItem)
+admin.site.register(Video,VideoAdmin)
