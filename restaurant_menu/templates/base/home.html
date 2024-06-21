@@ -4,54 +4,42 @@
 {% block content %}
 <main class="menu-layout">
   <div class="container">
-    <h1>Restaurant Menu</h1>
+    <h1 class="menu-title">Restaurant Menu</h1>
 
-    <!-- Button Group for Meal Categories -->
-    <div class="btn-group" role="group" aria-label="Meal Categories">
-      <button class="btn btn-outline-primary" onclick="showAllMeals()">Show All</button>
-      {% for meal in meals %}
-        <button class="btn btn-outline-secondary" onclick="showMeals('{{ meal.0 }}')">{{ meal.1 }}</button>
-      {% endfor %}
+        <!-- Button Group for Meal Categories -->
+    <div class="btn-group d-flex justify-content-center" role="group" aria-label="Meal Categories">
+      <button class="btn btn-outline-primary" onclick="showAllMeals()">All</button>
+        {% for meal in meals %}
+          <button class="btn btn-outline-secondary" onclick="showMeals('{{ meal.0 }}')">{{ meal.1 }}</button>
+        {% endfor %}
     </div>
-
     <!-- Meal Sections -->
-    <div class="mt-3">
+    <div class="mt-3" id="menu">
       {% for meal in meals %}
         <div class="meal-section" data-meal-type="{{ meal.0 }}" style="display: none;">
-          <h2 class="pt-5">{{ meal.1 }}</h2>
-          <ul class="list-group list-group-flush">
+          <div class="row row-cols-1 row-cols-md-3 g-4">
             {% for row in object_list %}
               {% if row.meal_type == meal.0 %}
-                <li class="list-group-item d-flex justify-content-between align-items-center border-0 pb-0">
-                  <a href="{% url 'menu_item_detail' row.pk %}">
-                    {% if row.status == 0 %}
-                      <b><del>{{ row.meal }}</del></b>
-                    {% else %}
-                      <b>{{ row.meal }}</b>
-                    {% endif %}
-                  </a>
-                  {% if row.image %}
-                    <img src="{{ row.image.url }}" alt="{{ row.meal }}" style="width: 100px; height: auto;">
-                  {% endif %}
-                  <span class="badge bg-primary rounded-pill">{{ row.price }}</span>
-                  <span><a href="{% url 'add_to_cart' row.pk %}">Add</a></span>
-                </li>
-                <li class="list-group-item pt-0">
-                  <p>{{ row.description }}</p>
-                </li>
+                <div class="col">
+                  <div class="card meal-card">
+                    <img src="{{ row.image.url }}" class="card-img-top" alt="{{ row.meal }}">
+                    <div class="card-body meal-card-body">
+                      <h5 class="card-title"><a style="color: orange;" href="{% url 'menu_item_detail' row.pk %}">{{ row.meal }}</a></h5>
+                      <p class="card-text">{{ row.description }}</p>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between align-items-center">
+                      <span class="badge bg-primary rounded-pill">{{ row.price }}</span>
+                      <a href="{% url 'add_to_cart' row.pk %}" class="btn btn-outline-success">Add to Cart</a>
+                    </div>
+                  </div>
+                </div>
               {% endif %}
             {% endfor %}
-          </ul>
+          </div>
         </div>
       {% endfor %}
     </div>
-
-    <a href="{% url 'view_cart' %}">Cart</a>
-
-    {% if user.is_authenticated and user.is_staff %}
-      <a href="{% url 'order_view' %}">Orders</a>
-      <a href="{% url 'video_list' %}">Video</a>
-    {% endif %}
+      <p class="disclaimer">*Disclaimer: Want to leave a review? Kindly click on the order name.*</p>
   </div>
   <div class="mini-about">
     <div class="imgd">
@@ -59,10 +47,9 @@
     </div>
     <div class="about-text">
       <h3>We Are R-Foods</h3>
-      <p>Welcome to R-foods, where we blend the warmth of traditional recipes <br> with a twist of modern culinary innovation. Our cozy restaurant is the perfect <br> spot for food lovers seeking to indulge in a diverse menu that pays homage to classic flavors <br> while embracing contemporary tastes. <br>
-      At R-foods,...</p>
+      <p>Welcome to R-foods, where we blend the warmth of traditional recipes <br> with a twist of modern culinary innovation. Our cozy restaurant is the perfect <br> spot for food lovers seeking to indulge in a diverse menu that pays homage to classic flavors <br> while embracing contemporary tastes. <br></p>
       <button class="btn-box">
-        <a href="" class="btn1">Read More</a>
+        <a href="{% url 'about' %}" class="btn1">Explore</a>
       </button>
     </div>
   </div>
@@ -126,4 +113,52 @@
     showAllMeals();
   });
 </script>
+<style>
+  .menu-title {
+    text-align: center;
+    color: orange;
+    margin-top: 2rem;
+}
+.btn-group .btn {
+    margin: 0.2rem;
+}
+.meal-card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.2s;
+    margin-top:15px;
+}
+.meal-card:hover {
+    transform: scale(1.05);
+}
+.meal-card img {
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    object-fit: cover;
+    width: 100%;
+    height: 200px;
+}
+.meal-card-body {
+    padding: 1rem;
+    background-color: #ffffff;
+}
+.badge {
+    font-size: 1rem;
+}
+.card-footer {
+    background-color: transparent;
+    border-top: none;
+}
+.cart-link, .staff-links a {
+    display: inline-block;
+    margin: 0.5rem;
+    text-decoration: none;
+    color: #007bff;
+}
+.cart-link:hover, .staff-links a:hover {
+    text-decoration: underline;
+}
+</style>
 {% endblock %}
