@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Item, MEAL_TYPE, Cart, CartItem, Profile, Order, OrderItem, ORDER_STATUS, Video, Review
-from .forms import SignUpForm, LoginForm, ProfileUpdateForm, UserUpdateForm, ReviewForm, ContactForm, OrderFilterForm , VideoForm, FeedbackForm
+from .models import Item, MEAL_TYPE, Cart, CartItem, Profile, Order, OrderItem, ORDER_STATUS, Video, Review,Book
+from .forms import SignUpForm, LoginForm, ProfileUpdateForm, UserUpdateForm, ReviewForm, ContactForm, OrderFilterForm , VideoForm, FeedbackForm, BookForm
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -13,7 +13,7 @@ from django.utils import timezone
 from django.contrib.auth.decorators import user_passes_test
 from django.core.mail import send_mail
 from django.conf import settings
-from django.http import HttpResponse
+from django.http import HttpResponse, FileResponse 
 from django.contrib import messages
 
 
@@ -490,3 +490,27 @@ def edit_video(request, video_id):
     else:
         form = VideoForm(instance=video)
     return render(request, 'base/edit_video.html', {'form': form, 'video': video})
+
+
+
+def upload_book(request):
+    if request.method == 'POST':
+        form = BookForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Book uploaded successfully')
+            return redirect('book_list')
+        
+    else:
+        form = BookForm()
+    return render(request, 'base/upload.html', {'form': form})
+
+
+def book_list(request):
+    books = Book.objects.all()
+    return render(request, 'base/book_list.html', {'books':books})
+
+
+def read_book(request, book_id):
+    book =get_object_or_404(Book,id=book_id)
+    return FileResponse(open(book.file.path,'rb'), content_type= 'application/pdf')

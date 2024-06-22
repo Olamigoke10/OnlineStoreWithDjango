@@ -1,0 +1,18 @@
+{% extends 'new_main.html' %}
+
+{% block content %}
+
+<div class="book-list container shadow p-3 mb-5 bg-white rounded text-center">
+    <h2 style="color:orange;">Book List</h2>
+        <ul class="list-unstyled text-center">
+        {% for book in books %}
+            <li class="book-entry text-center">
+            <strong>{{ book.title }}</strong> <span>_</span> by {{ book.author }}
+            <br>
+            <a href="{% url 'read_book' book.id %}" class="btn btn-sm btn-success">Read</a>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+
+{% endblock %}

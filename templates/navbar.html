@@ -8,7 +8,7 @@
     <header class="header_section">
         <div class="container">
             <nav class="navbar navbar-expand-lg custom_nav-container">
-                <a class="navbar-brand" href="index.html">
+                <a class="navbar-brand" href="{% url 'home' %}">
                     <span>R-Foods</span>
                 </a>
 
@@ -18,11 +18,11 @@
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mx-auto">
-                        <li class="nav-item active">
-                            <a class="nav-link" href="#">Home</a>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'home' %}">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Menu</a>
+                            <a class="nav-link" href="#menu">Menu</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'about' %}">About</a>
@@ -41,11 +41,13 @@
                                 <div id="myDropdown" class="profile-dropdown-content">
                                     <a href="{% url 'logout' %}" class="order_online">Logout</a>
                                     <a href="{% url 'profile' %}">Profile</a>
-                                    <a href="">Orders</a>
+                                    <a href="{% url 'order_view' %}">Orders</a>
                                     {% if user.is_authenticated and user.is_staff %}
                                         <div>
-                                            <a href="{% url 'order_view' %}">Orders</a>
+                                            <a href="{% url 'admin:index' %}">Admin</a>
+                                            <a href="{% url 'order_view' %}">Staff-Orders</a>
                                             <a href="{% url 'video_list' %}">Video</a>
+                                            <a href="{% url 'upload_book' %}">Books</a>
                                         </div>
                                     {% endif %}
                                 </div>
@@ -72,9 +74,9 @@
     </header>
     <!-- end header section -->
 
-    <!-- slider section -->
+    <!-- slider section --> 
     <section class="slider_section">
-        <div id="customCarousel1" class="carousel slide" data-ride="carousel" data-interval="3000">
+        <div id="customCarousel1" class="carousel slide" data-ride="carousel" data-interval="7000">
             <div class="carousel-inner">
                 <div class="carousel-item active">
                     <div class="container">
@@ -84,7 +86,7 @@
                                     <h1>R-Foods Restaurant</h1>
                                     <p>Discover the taste adventure at R-foods! Dive into our world of juicy burgers, golden fries, and milkshakes that sing with flavor, all made from the finest ingredients.</p>
                                     <div class="btn-box">
-                                        <a href="" class="btn1">Order Now</a>
+                                        <a href="#menu" class="btn1">Order Now</a>
                                     </div>
                                 </div>
                             </div>
@@ -99,7 +101,7 @@
                                     <h1>Contact us</h1>
                                     <p>Connect with R-foods for queries or comments. Email us at r-foods@gmail.com or dial (123) 456-7890. Your input and satisfaction are our top priorities.</p>
                                     <div class="btn-box">
-                                        <a href="" class="btn1">Contact Us</a>
+                                        <a href="{% url 'contact' %}" class="btn1">Contact Us</a>
                                     </div>
                                 </div>
                             </div>
@@ -114,7 +116,7 @@
                                     <h1>Hotel Partnerships</h1>
                                     <p>R-foods partners with premier hotels to enhance your stay. Savor our meals, then relax in luxury. Inquire within for exclusive hotel booking deals post-dining.</p>
                                     <div class="btn-box">
-                                        <a href="" class="btn1">Book Now</a>
+                                        <a href="https://hotels.ng/" class="btn1">Book Now</a>
                                     </div>
                                 </div>
                             </div>

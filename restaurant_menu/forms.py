@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
-from .models import Item, Profile, Review, Video
+from .models import Item, Profile, Review, Video, Book
 
 class SignUpForm(UserCreationForm):
     email = forms.EmailField()
@@ -75,3 +75,10 @@ class FeedbackForm(forms.Form):
     last_name = forms.CharField(max_length=100, required=True, widget=forms.TextInput(attrs={'placeholder': 'Your last name..'}))
     email = forms.EmailField(required=True, widget=forms.EmailInput(attrs={'placeholder': 'Your email..'}))
     subject = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Write something..', 'rows': 5}), required=True)
+
+
+
+class BookForm(forms.ModelForm):
+    class Meta:
+        model = Book
+        fields = ['title', 'author', 'description', 'file']

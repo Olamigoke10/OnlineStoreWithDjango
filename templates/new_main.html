@@ -27,9 +27,11 @@
 
     <div class="container-fluid">
         {% block content %}
-        {% comment %} {% include 'footer.html' %} {% endcomment %}
+ 
         {% endblock %}
     </div>
+
+    {% include 'footer.html' %} 
 
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

@@ -1,25 +1,84 @@
 {% load static %}
 
-<footer>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-4 footer-col">
-                <div class="footer-contact">
-                    <h4>Contact Us</h4>
-                </div>
-                <div>
-                    <img src="{% static 'images/location.png' %}" alt="">
-                    <h5>No 1,Something street, somewhere, Nigeria</h5>
-                </div>
-                <div>
-                    <img src="{% static 'images/phonepng' %}" alt="">
-                    <h5>Call: 080-111-222-33</h5>
-                </div>
-                <div>
-                    <img src="{% static 'images/mail.png' %}" alt="">
-                    <h5>R-foods@gmail.com</h5>
-                </div>
+{% block content %}
+
+    <footer>
+        <section>
+            <div id="socials">
+                <span>Follow Us:
+                    <a href="www.facebook.com">
+                        <img src="{% static 'images/icons8-facebook-120.png' %}" alt="" width="30">
+                    </a>
+                    <a href="www.instagram.com">
+                        <img src="{% static 'images/pngtree-instagram-social-flat-silhouette-icons-png-image_6315977.png' %}"
+                            alt="" width="30">
+                        </a>
+                    <a href="www,pintrest.com">
+                        <img src="{% static 'images/icons8-pinterest-120.png' %}" alt="" width="30">
+                    </a>
+                    <a href="www.twitter.com">
+                        <img src="{% static 'images/icons8-twitter-150.png' %}" alt="" width="30">
+                    </a>
+                    <hr>
+                </span>
             </div>
-        </div>
-    </div>
-</footer>
+
+            <div class="policies">
+                <span>
+                    <a href="#">PRIVACY POLICY</a>
+                    <a href="#">COPYRIGHT</a>
+                    <a href="#">LEGAL POLICY</a>
+                    <a href="#">COOKIE POLICY</a>
+                </span>
+            </div>
+
+            <div class="rights">
+                <p>&copy;2024 R-Foods All Rights Reserved</p>
+            </div>
+        </section>
+    </footer>
+
+    <style>
+footer{
+    width: 100%;
+    height: fit-content;
+    margin-top: 40px;
+    background-color: #000;
+    color: #fff;
+}
+#socials{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+#socials a{
+    text-decoration: none;
+}
+#socials span{
+    font-size: 1.9rem;
+    font-weight: bolder;
+    margin-right: 40px;
+}
+#socials img{
+    margin-right: 20px;
+}
+.policies span{ 
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+.policies span a{ 
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.rights{
+    text-align: center;
+    font-size: .8rem;
+}
+hr{
+    background-color: #fff;
+}
+    </style>
+{% endblock %}

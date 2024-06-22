@@ -5,8 +5,6 @@ from django.conf.urls.static import static
 from django.views.generic import TemplateView
 
 
-
-
 urlpatterns = [
     path('', views.menu_list, name='home'),
     path('item/<int:pk>/', views.menu_item_detail, name='menu_item_detail'),
@@ -36,7 +34,11 @@ urlpatterns = [
     
     path('item/<int:item_id>/', views.item_detail, name='item_detail'),
     path('items/<int:item_id>/submit_review/', views.submit_review, name='submit_review'),
-    
+
+
+    path('upload_book/',views.upload_book, name='upload_book'),
+    path('books/', views.book_list, name='book_list'),
+    path('read/<int:book_id>/',views.read_book, name='read_book')    
     
     
 ]

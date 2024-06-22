@@ -1,0 +1,16 @@
+{% extends 'new_main.html' %}
+
+{% block content %}
+
+<div class="upload-book container shadow p-3 mb-5 bg-white rounded">
+    <h2 style="color:orange; text-align: center">Upload Book</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.as_p }}
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Upload</button>
+    </form>
+</div>
+
+{% endblock %}
