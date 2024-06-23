@@ -58,7 +58,7 @@ class ContactForm(forms.Form):
 
 class OrderFilterForm(forms.Form):
     STATUS_CHOICES = [
-        ('', 'All'),  # Add an 'All' option to show all orders regardless of status
+        ('', 'All'),  
         ('pending', 'Pending'),
         ('delivered', 'Delivered'),
     ]

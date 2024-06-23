@@ -74,8 +74,8 @@ def register(request):
             # Send email to the user
             subject = 'Welcome to Our Site'
             message = f'Hi {first_name} {last_name}, thank you for registering on our site.'
-            from_email = settings.EMAIL_HOST_USER  # Use your own email settings from settings.py
-            to_email = [user.email]  # Assuming user.email is where you store the user's email
+            from_email = settings.EMAIL_HOST_USER 
+            to_email = [user.email]  
 
             try:
                 send_mail(subject, message, from_email, to_email, fail_silently=False)
