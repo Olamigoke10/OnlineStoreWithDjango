@@ -41,7 +41,7 @@
                                 <div id="myDropdown" class="profile-dropdown-content">
                                     <a href="{% url 'logout' %}" class="order_online">Logout</a>
                                     <a href="{% url 'profile' %}">Profile</a>
-                                    <a href="{% url 'order_view' %}">Orders</a>
+                                    <a href="{% url 'order_history' %}">Orders</a>
                                     {% if user.is_authenticated and user.is_staff %}
                                         <div>
                                             <a href="{% url 'admin:index' %}">Admin</a>
